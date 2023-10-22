@@ -5,6 +5,15 @@
 #include <GL/gl.h>
 
 
+///ADD LIBRARIES///
+
+
+
+
+
+
+
+
 ///------TABLE COLOUR CODE START--------///
 //table_surface_colour
 GLfloat mat_surface_ambient[] = { 0.545, 0.270, 0.074, 5.0 };
@@ -27,6 +36,15 @@ GLfloat mat_screen_diffuse[] = { 0, 0, 0, 5.0 };
 GLfloat mat_screen_specular[] = { 0, 0, 0, 5.0 };
 GLfloat mat_screen_shininess = 10000.0;
 ///------TABLE COLOUR CODE END--------///
+
+
+///ADD COLOURS///
+
+
+
+
+
+
 
 ///------TABLE VOID CODE START--------///
 //Table
@@ -940,6 +958,19 @@ void Table_Master()
 }
 ///------TABLE VOID CODE END--------///
 
+////ADD VOID CODE///
+
+
+
+
+
+
+
+
+
+
+
+
 void myinit()
 {
     glViewport(0, 0, 50000, 50000);
@@ -957,6 +988,14 @@ void display()
     glLightfv(GL_LIGHT0, GL_DIFFUSE, b);
     glRotatef(10, 0.2, 1, 0.2);
 
+
+
+
+
+
+
+
+
     ///-----------LIGHT SOURCE CODE START--------///
     //Light_direction
     GLfloat light_direction[] = { -500.0, 500.0, -500.0, 0.0 };
@@ -969,9 +1008,21 @@ void display()
     glEnable(GL_LIGHT0);
     ///-----------LIGHT SOURCE CODE END--------///
 
+
+
+
+
+
+
      ///------TABLE DISPLAY START--------///
     Table_Master();
     ///------TABLE DISPLAY END--------///
+
+
+    ///ADD METHODS///
+
+
+
 
     glFlush();
 }
