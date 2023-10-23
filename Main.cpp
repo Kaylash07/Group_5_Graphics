@@ -1,20 +1,143 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <GL/glut.h>
-#include <GL/gl.h>
-#include <GL/gl.h>
+#include <GL/glu.h>
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
+#include <cmath>
+
+int width = 800;
+int height = 600;
+
+float cameraX = -800.0f;
+float cameraY = 0.0f;
+float cameraZ = -3000.0f;
+float cameraSpeed = 10.0f;
+float cameraRotationSpeed = 1.0f;
+
+float cameraPitch = -90.0f;
+float cameraYaw = -360.0f;
+
+void reshape(int w, int h)
+{
+    width = w;
+    height = h;
+    glViewport(0, 0, width, height);
+    glMatrixMode(GL_PROJECTION);
+    glLoadIdentity();
+    gluPerspective(45.0, (double)width / (double)height, 1.0, 1000000.0);
+    glMatrixMode(GL_MODELVIEW);
+}
+
+void moveCamera(float directionX, float directionY, float directionZ)
+{
+    glm::vec3 cameraFront;
+    cameraFront.x = cos(glm::radians(cameraYaw)) * cos(glm::radians(cameraPitch));
+    cameraFront.y = sin(glm::radians(cameraPitch));
+    cameraFront.z = sin(glm::radians(cameraYaw)) * cos(glm::radians(cameraPitch));
+
+    glm::vec3 cameraRight = glm::normalize(glm::cross(cameraFront, glm::vec3(0.0f, 0.0f, 1.0f)));
+    glm::vec3 cameraUp = glm::normalize(glm::cross(cameraRight, cameraFront));
+
+    glm::vec3 cameraPosition(cameraX, cameraY, cameraZ);
+    cameraPosition += directionX * cameraSpeed * cameraRight;
+    cameraPosition += directionY * cameraSpeed * cameraFront;
+    cameraPosition += directionZ * cameraSpeed * cameraUp;
+
+    cameraX = cameraPosition.x;
+    cameraY = cameraPosition.y;
+    cameraZ = cameraPosition.z;
+}
+
+void keyboard(unsigned char key, int x, int y)
+{
+    switch (key)
+    {
+    case 'a': // Move or turn left
+        moveCamera(-1, 0, 0);
+        break;
+    case 'd': // Move or turn right
+        moveCamera(1, 0, 0);
+        break;
+    case 'w': // Move or turn up
+        moveCamera(0, 1, 0);
+        break;
+    case 's': // Move or turn down
+        moveCamera(0, -1, 0);
+        break;
+    case 'q': // Move forward
+        moveCamera(0, 0, 1);
+        break;
+    case 'e': // Move backward
+        moveCamera(0, 0, -1);
+        break;
+    case 'j': // Turn left
+        cameraYaw -= cameraRotationSpeed;
+        break;
+    case 'l': // Turn right
+        cameraYaw += cameraRotationSpeed;
+        break;
+    case 'i': // Turn up
+        cameraPitch += cameraRotationSpeed;
+        if (cameraPitch > 89.0f)
+            cameraPitch = 89.0f;
+        break;
+    case 'k': // Turn down
+        cameraPitch -= cameraRotationSpeed;
+        if (cameraPitch < -89.0f)
+            cameraPitch = -89.0f;
+        break;
+    }
+
+    glutPostRedisplay();
+}
+
+void updateCameraView()
+{
+    glMatrixMode(GL_MODELVIEW);
+    glLoadIdentity();
+
+    glm::vec3 cameraFront;
+    cameraFront.x = cos(glm::radians(cameraYaw)) * cos(glm::radians(cameraPitch));
+    cameraFront.y = sin(glm::radians(cameraPitch));
+    cameraFront.z = sin(glm::radians(cameraYaw)) * cos(glm::radians(cameraPitch));
+
+    glm::vec3 cameraTarget = glm::vec3(cameraX, cameraY, cameraZ) + cameraFront;
+    glm::vec3 cameraUp = glm::vec3(0.0f, 0.0f, 1.0f);
+
+    glm::mat4 view = glm::lookAt(glm::vec3(cameraX, cameraY, cameraZ), cameraTarget, cameraUp);
+    glLoadMatrixf(glm::value_ptr(view));
+}
+
+
+
 
 ////-------------CLASSROOM CODE START---------------////
 ///------CLASSROOM CODE COLOUR CODE START--------///
+//floor_surface_colour
+GLfloat mat_floor_ambient[] = { 0.1, 0.1, 0.2, 1.0 }; // Adjusted for a faded navy blue ambient color
+GLfloat mat_floor_diffuse[] = { 0.1, 0.1, 0.2, 1.0 }; // Adjusted for a faded navy blue diffuse color
+GLfloat mat_floor_specular[] = { 0.05, 0.05, 0.1, 1.0 }; // Adjusted for a less intense specular color
+GLfloat mat_floor_shininess = 5.0; // Adjusted for a moderate shininess
+//wall_surface_colour
+GLfloat mat_wall_ambient[] = { 0.9, 0.8, 0.6, 1.0 }; // Adjusted for beige ambient color
+GLfloat mat_wall_diffuse[] = { 0.9, 0.8, 0.6, 1.0 }; // Adjusted for beige diffuse color
+GLfloat mat_wall_specular[] = { 0.2, 0.2, 0.2, 1.0 }; // You can keep the specular color the same
+GLfloat mat_wall_shininess = 10.0; // You can adjust shininess as desired
+//ceiling_surface_colour
+GLfloat mat_ceiling_ambient[] = { 0.8, 0.8, 0.8, 1.0 }; // Adjusted for light gray ambient color
+GLfloat mat_ceiling_diffuse[] = { 0.8, 0.8, 0.8, 1.0 }; // Adjusted for light gray diffuse color
+GLfloat mat_ceiling_specular[] = { 0.2, 0.2, 0.2, 1.0 }; // You can keep the specular color the same
+GLfloat mat_ceiling_shininess = 10.0; // You can adjust shininess as desired
+
+
+
 
 
 
 ///------CLASSROOM CODE COLOUR CODE END--------///
 
-///------CLASSROOM VOID CODE START--------///
-
-
-///------CLASSROOM VOID CODE END--------///
 
 
 
@@ -45,14 +168,11 @@ GLfloat mat_pc_ambient[] = { 0.2, 0.2, 0.2, 1.0 }; // Ambient color for plastic
 GLfloat mat_pc_diffuse[] = { 0.7, 0.7, 0.7, 1.0 }; // Diffuse color for plastic
 GLfloat mat_pc_specular[] = { 0.1, 0.1, 0.1, 1.0 }; // Specular color for plastic
 GLfloat mat_pc_shininess = 10.0; // Shininess of the plastic surface
-
-
 //PC screen color (black)
 GLfloat mat_screen_ambient[] = { 0.1, 0.1, 0.1, 1.0 }; // Ambient color for glass
 GLfloat mat_screen_diffuse[] = { 0.1, 0.1, 0.1, 0.8 }; // Diffuse color for glass
 GLfloat mat_screen_specular[] = { 0.9, 0.9, 0.9, 1.0 }; // Specular color for glass
 GLfloat mat_screen_shininess = 50.0; // Shininess of the glass surface
-
 
 ///------TABLE COLOUR CODE END--------///
 
@@ -63,6 +183,17 @@ GLfloat mat_chair_diffuse[] = { 0.396, 0.263, 0.129, 5.0 }; // Darker brown diff
 GLfloat mat_chair_specular[] = { 0.396, 0.263, 0.129, 5.0 }; // Darker brown specular color
 GLfloat mat_chair_shininess = 2.0;
 ///------CHAIR COLOUR CODE END--------///
+
+///------SKY COLOUR CODE START--------///
+//sky_colour
+GLfloat mat_sky_ambient[] = { 0.529, 0.808, 0.922, 1.0 }; // Light blue ambient color
+GLfloat mat_sky_diffuse[] = { 0.529, 0.808, 0.922, 1.0 }; // Light blue diffuse color
+GLfloat mat_sky_specular[] = { 0.529, 0.808, 0.922, 1.0 }; // Light blue specular color
+GLfloat mat_sky_shininess = 30.0; // Adjust the shininess as needed
+///------SKY COLOUR CODE END--------///
+
+
+
 
 
 
@@ -75,10 +206,88 @@ GLfloat mat_chair_shininess = 2.0;
 
 
 
+///------SKY VOID CODE START--------///
+void Sky()
+{
+    glMaterialfv(GL_FRONT, GL_AMBIENT, mat_sky_ambient);
+    glMaterialfv(GL_FRONT, GL_DIFFUSE, mat_sky_diffuse);
+    glMaterialfv(GL_FRONT, GL_SPECULAR, mat_sky_specular);
+    glMaterialf(GL_FRONT, GL_SHININESS, mat_sky_shininess);
+
+}
+///------SKY VOID CODE END--------///
 
 
+///------CLASSROOM VOID CODE START--------///
 
+void floor()
+{
+    glMaterialfv(GL_FRONT, GL_AMBIENT, mat_floor_ambient);
+    glMaterialfv(GL_FRONT, GL_DIFFUSE, mat_floor_diffuse);
+    glMaterialfv(GL_FRONT, GL_SPECULAR, mat_floor_specular);
+    glMaterialf(GL_FRONT, GL_SHININESS, mat_floor_shininess);
 
+    glPushMatrix();
+    glTranslated(0, -430, -400);
+    glScalef(2500, 50, 3500);
+    glutSolidCube(1.0);
+    glPopMatrix();
+}
+
+void walls()
+{
+    glMaterialfv(GL_FRONT, GL_AMBIENT, mat_wall_ambient);
+    glMaterialfv(GL_FRONT, GL_DIFFUSE, mat_wall_diffuse);
+    glMaterialfv(GL_FRONT, GL_SPECULAR, mat_wall_specular);
+    glMaterialf(GL_FRONT, GL_SHININESS, mat_wall_shininess);
+
+    glPushMatrix();
+    glTranslated(1215, 345, -400);
+    glScalef(70, 1500, 3500);
+    glutSolidCube(1.0);
+    glPopMatrix();
+
+    glPushMatrix();
+    glTranslated(-1215, 345, -400);
+    glScalef(70, 1500, 3500);
+    glutSolidCube(1.0);
+    glPopMatrix();
+
+    glPushMatrix();
+    glTranslated(0, 345, -2115);
+    glScalef(2360, 1500, 70);
+    glutSolidCube(1.0);
+    glPopMatrix();
+
+    glPushMatrix();
+    glTranslated(0, 345, 1315);
+    glScalef(2360, 1500, 70);
+    glutSolidCube(1.0);
+    glPopMatrix();
+}
+void ceiling()
+{
+    glMaterialfv(GL_FRONT, GL_AMBIENT, mat_ceiling_ambient);
+    glMaterialfv(GL_FRONT, GL_DIFFUSE, mat_ceiling_diffuse);
+    glMaterialfv(GL_FRONT, GL_SPECULAR, mat_ceiling_specular);
+    glMaterialf(GL_FRONT, GL_SHININESS, mat_ceiling_shininess);
+
+    glPushMatrix();
+    glTranslated(0, 1120, -400);
+    glScalef(2500, 50, 3500);
+    glutSolidCube(1.0);
+    glPopMatrix();
+}
+
+void Classroom()
+{
+    glPushMatrix();
+    floor();
+    walls();
+    ceiling();
+    glPopMatrix();
+}
+///------CLASSROOM VOID CODE END--------///
 ///------TABLE VOID CODE START--------///
 //Table
 void leg()
@@ -1081,72 +1290,67 @@ void Table_Master()
 
 void myinit()
 {
-    glViewport(0, 0, 50000, 50000);
+    glViewport(5000, 5000, 100000, 50000);  // Set the viewport to start at (0, 0) and have dimensions of 800x800.
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
-    glOrtho(-1500, 1500, -1500, 1500, -3000, 3000);
+    glOrtho(-1400, 1400, -1400, 1400, -3000, 3000);  // Adjust the orthographic projection to focus on a smaller region around the origin.
     glMatrixMode(GL_MODELVIEW);
+}
+
+void CLASSROOM_MASTER()
+{
+    glPushMatrix();
+    glTranslatef(-1000, 0, -1000);
+    Classroom();
+    Table_Master();
+    Sky();
+    glPopMatrix();
 }
 void display()
 {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-    GLfloat a[] = { 0.8,350.0,+350,1.0 };
-    GLfloat b[] = { 1.0,1.0,1.0,1.0 };
-    glLightfv(GL_LIGHT0, GL_POSITION, a);
-    glLightfv(GL_LIGHT0, GL_DIFFUSE, b);
-    glRotatef(10, 0.2, 1, 0.2);
 
+    // Apply camera transformation
+    glMatrixMode(GL_MODELVIEW);
+    glLoadIdentity();
+    updateCameraView(); // This function applies the camera position and orientation
 
-
-
-
-
-
-
-
-    ///-----------LIGHT SOURCE CODE START--------///
-    //Light_direction
+    // Set up lighting
     GLfloat light_direction[] = { -500.0, 500.0, -500.0, 0.0 };
-    //Sunlight_colour
     GLfloat light_color[] = { 1.0, 1.0, 0.9, 1.0 };
+
     glLightfv(GL_LIGHT0, GL_POSITION, light_direction);
     glLightfv(GL_LIGHT0, GL_DIFFUSE, light_color);
 
     glEnable(GL_LIGHTING);
     glEnable(GL_LIGHT0);
-    ///-----------LIGHT SOURCE CODE END--------///
 
+    // Add your objects to the scene
+    CLASSROOM_MASTER(); // Example function, replace with your own objects
 
-
-
-
-
-
-     ///------TABLE DISPLAY START--------///
-    Table_Master();
-    ///------TABLE DISPLAY END--------///
-
-
-    ///ADD METHODS///
-
-
-
-
-    glFlush();
+    glutSwapBuffers();
 }
+
+
+
+
 int main(int argc, char** argv)
 {
     glutInit(&argc, argv);
     glutInitDisplayMode(GLUT_SINGLE | GLUT_RGB | GLUT_DEPTH);
-    glutInitWindowPosition(0, 0);
-    glutInitWindowSize(50000, 50000);
+    glutInitWindowSize(width, height);
     glutCreateWindow("Classroom");
-    myinit();
+    myinit(); // Initialize your OpenGL environment, including viewport and projection.
+    glutReshapeFunc(reshape);
     glutDisplayFunc(display);
+    glutKeyboardFunc(keyboard);
+
+    // Enable or disable OpenGL features as needed.
     glEnable(GL_LIGHTING);
     glEnable(GL_LIGHT0);
     glShadeModel(GL_SMOOTH);
     glEnable(GL_DEPTH_TEST);
     glEnable(GL_NORMALIZE);
+
     glutMainLoop();
 }
