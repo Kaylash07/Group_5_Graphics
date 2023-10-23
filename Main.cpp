@@ -4,29 +4,62 @@
 #include <GL/gl.h>
 #include <GL/gl.h>
 
+////-------------CLASSROOM CODE START---------------////
+///------CLASSROOM CODE COLOUR CODE START--------///
+
+
+
+///------CLASSROOM CODE COLOUR CODE END--------///
+
+///------CLASSROOM VOID CODE START--------///
+
+
+///------CLASSROOM VOID CODE END--------///
+
+
+
 
 ///------TABLE COLOUR CODE START--------///
 //table_surface_colour
-GLfloat mat_surface_ambient[] = { 0.545, 0.270, 0.074, 5.0 };
-GLfloat mat_surface_diffuse[] = { 0.545, 0.270, 0.074, 5.0 };
-GLfloat mat_surface_specular[] = { 0.545, 0.270, 0.074, 5.0 };
-GLfloat mat_surface_shininess = 2.0;
+GLfloat mat_surface_ambient[] = { 0.8, 0.4, 0.1, 1.0 }; // Adjusted for a more orange ambient color
+GLfloat mat_surface_diffuse[] = { 0.8, 0.4, 0.1, 1.0 }; // Adjusted for a more orange diffuse color
+GLfloat mat_surface_specular[] = { 0.1, 0.1, 0.1, 1.0 }; // Specular color is usually less intense
+GLfloat mat_surface_shininess = 10.0;                  // Adjusted for a moderate shininess
 //table_frame_colour
-GLfloat mat_legs_ambient[] = { 0.03, 0.03, 0.03, 5.0 };
-GLfloat mat_legs_diffuse[] = { 0.03, 0.03, 0.03, 5.0 };
-GLfloat mat_legs_specular[] = { 0.03, 0.03, 0.03, 5.0 };
-GLfloat mat_legs_shininess = 100.0;
-//pc_colour
-GLfloat mat_pc_ambient[] = { 0.04, 0.04, 0.04, 5.0 };
-GLfloat mat_pc_diffuse[] = { 0.04, 0.04, 0.04, 5.0 };
-GLfloat mat_pc_specular[] = { 0.04, 0.04, 0.04, 5.0 };
-GLfloat mat_pc_shininess = 1000.0;
-//pc_screen_colour
-GLfloat mat_screen_ambient[] = { 0, 0, 0, 5.0 };
-GLfloat mat_screen_diffuse[] = { 0, 0, 0, 5.0 };
-GLfloat mat_screen_specular[] = { 0, 0, 0, 5.0 };
-GLfloat mat_screen_shininess = 10000.0;
+GLfloat mat_legs_ambient[] = { 0.05, 0.05, 0.05, 1.0 }; // Adjusted for a darker ambient color
+GLfloat mat_legs_diffuse[] = { 0.05, 0.05, 0.05, 1.0 }; // Adjusted for a darker diffuse color
+GLfloat mat_legs_specular[] = { 0.1, 0.1, 0.1, 1.0 };  // Specular color is usually less intense
+GLfloat mat_legs_shininess = 50.0;                   // Adjusted for a relatively high shininess
+
+//PC color (darker gray)
+GLfloat mat_pc_ambient[] = { 0.2, 0.2, 0.2, 1.0 }; // Ambient color for plastic
+GLfloat mat_pc_diffuse[] = { 0.7, 0.7, 0.7, 1.0 }; // Diffuse color for plastic
+GLfloat mat_pc_specular[] = { 0.1, 0.1, 0.1, 1.0 }; // Specular color for plastic
+GLfloat mat_pc_shininess = 10.0; // Shininess of the plastic surface
+
+
+//PC screen color (black)
+GLfloat mat_screen_ambient[] = { 0.1, 0.1, 0.1, 1.0 }; // Ambient color for glass
+GLfloat mat_screen_diffuse[] = { 0.1, 0.1, 0.1, 0.8 }; // Diffuse color for glass
+GLfloat mat_screen_specular[] = { 0.9, 0.9, 0.9, 1.0 }; // Specular color for glass
+GLfloat mat_screen_shininess = 50.0; // Shininess of the glass surface
+
+
 ///------TABLE COLOUR CODE END--------///
+
+///------CHAIR COLOUR CODE START--------///
+//chair_colour
+GLfloat mat_chair_ambient[] = { 0.396, 0.263, 0.129, 5.0 }; // Darker brown ambient color
+GLfloat mat_chair_diffuse[] = { 0.396, 0.263, 0.129, 5.0 }; // Darker brown diffuse color
+GLfloat mat_chair_specular[] = { 0.396, 0.263, 0.129, 5.0 }; // Darker brown specular color
+GLfloat mat_chair_shininess = 2.0;
+///------CHAIR COLOUR CODE END--------///
+
+
+
+
+
+
 
 ///------TABLE VOID CODE START--------///
 //Table
@@ -863,6 +896,78 @@ void PC_master()
     keyboard();
     glPopMatrix();
 }
+
+//Chair_Code
+void chair()
+{
+    glMaterialfv(GL_FRONT, GL_AMBIENT, mat_chair_ambient);
+    glMaterialfv(GL_FRONT, GL_DIFFUSE, mat_chair_diffuse);
+    glMaterialfv(GL_FRONT, GL_SPECULAR, mat_chair_specular);
+    glMaterialf(GL_FRONT, GL_SHININESS, mat_chair_shininess);
+
+    glPushMatrix();
+    glTranslated(0, 400, 0);
+    glScalef(15, 450, 15);
+    glutSolidCube(1.0);
+    glPopMatrix();
+
+    glPushMatrix();
+    glTranslated(100, 400, 0);
+    glScalef(15, 450, 15);
+    glutSolidCube(1.0);
+    glPopMatrix();
+
+    glPushMatrix();
+    glTranslated(0, 280, 100);
+    glScalef(15, 200, 15);
+    glutSolidCube(1.0);
+    glPopMatrix();
+
+    glPushMatrix();
+    glTranslated(100, 280, 100);
+    glScalef(15, 200, 15);
+    glutSolidCube(1.0);
+    glPopMatrix();
+
+    glPushMatrix();
+    glTranslated(50, 380, 50);
+    glScalef(120, 20, 120);
+    glutSolidCube(1.0);
+    glPopMatrix();
+
+    glPushMatrix();
+    glTranslated(50, 500, 0);
+    glScalef(110, 30, 15);
+    glutSolidCube(1.0);
+    glPopMatrix();
+
+    glPushMatrix();
+    glTranslated(50, 600, 0);
+    glScalef(110, 30, 15);
+    glutSolidCube(1.0);
+    glPopMatrix();
+}
+
+//chair_1
+void Chair_Master()
+{
+
+    glPushMatrix();
+    glTranslatef(180, -580, -200);
+    chair();
+    glPopMatrix();
+
+    glPushMatrix();
+    glTranslatef(-150, -580, -200);
+    chair();
+    glPopMatrix();
+
+    glPushMatrix();
+    glTranslatef(-300, -580, -200);
+    chair();
+    glPopMatrix();
+}
+
 //Tables
 void Table1()
 {
@@ -889,6 +994,8 @@ void Table1()
     glMaterialfv(GL_FRONT, GL_SPECULAR, mat_screen_specular);
     glMaterialf(GL_FRONT, GL_SHININESS, mat_screen_shininess);
     screen();
+
+    Chair_Master();
 }
 void Table2()
 {
@@ -925,6 +1032,7 @@ void Table6()
     Table1();
     glPopMatrix();
 }
+
 //ALL_TABLES
 void Table_Master()
 {
@@ -981,7 +1089,7 @@ int main(int argc, char** argv)
     glutInitDisplayMode(GLUT_SINGLE | GLUT_RGB | GLUT_DEPTH);
     glutInitWindowPosition(0, 0);
     glutInitWindowSize(50000, 50000);
-    glutCreateWindow("Table");
+    glutCreateWindow("Classroom");
     myinit();
     glutDisplayFunc(display);
     glEnable(GL_LIGHTING);
