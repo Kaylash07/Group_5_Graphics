@@ -7,6 +7,7 @@
 #include <glm/gtc/type_ptr.hpp>
 #include <cmath>
 
+///---------CAMERA CODE START--------///
 int width = 800;
 int height = 600;
 
@@ -109,7 +110,7 @@ void updateCameraView()
     glm::mat4 view = glm::lookAt(glm::vec3(cameraX, cameraY, cameraZ), cameraTarget, cameraUp);
     glLoadMatrixf(glm::value_ptr(view));
 }
-
+///---------CAMERA CODE END--------///
 
 
 
@@ -162,12 +163,11 @@ GLfloat mat_legs_ambient[] = { 0.05, 0.05, 0.05, 1.0 }; // Adjusted for a darker
 GLfloat mat_legs_diffuse[] = { 0.05, 0.05, 0.05, 1.0 }; // Adjusted for a darker diffuse color
 GLfloat mat_legs_specular[] = { 0.1, 0.1, 0.1, 1.0 };  // Specular color is usually less intense
 GLfloat mat_legs_shininess = 50.0;                   // Adjusted for a relatively high shininess
-
-//PC color (darker gray)
-GLfloat mat_pc_ambient[] = { 0.2, 0.2, 0.2, 1.0 }; // Ambient color for plastic
-GLfloat mat_pc_diffuse[] = { 0.7, 0.7, 0.7, 1.0 }; // Diffuse color for plastic
-GLfloat mat_pc_specular[] = { 0.1, 0.1, 0.1, 1.0 }; // Specular color for plastic
-GLfloat mat_pc_shininess = 10.0; // Shininess of the plastic surface
+//PC cover/monitor color
+GLfloat mat_pc_ambient[] = { 0.05, 0.05, 0.05, 1.0 }; // Darkened ambient color for almost black plastic
+GLfloat mat_pc_diffuse[] = { 0.1, 0.1, 0.1, 1.0 }; // Darkened diffuse color for almost black plastic
+GLfloat mat_pc_specular[] = { 0.01, 0.01, 0.01, 1.0 }; // Darkened specular color for almost black plastic
+GLfloat mat_pc_shininess = 10.0; // Shininess of the almost black plastic surface
 //PC screen color (black)
 GLfloat mat_screen_ambient[] = { 0.1, 0.1, 0.1, 1.0 }; // Ambient color for glass
 GLfloat mat_screen_diffuse[] = { 0.1, 0.1, 0.1, 0.8 }; // Diffuse color for glass
