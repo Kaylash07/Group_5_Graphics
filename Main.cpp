@@ -19,6 +19,15 @@
 
 
 
+///ADD LIBRARIES///
+
+
+
+
+
+
+
+
 ///------TABLE COLOUR CODE START--------///
 //table_surface_colour
 GLfloat mat_surface_ambient[] = { 0.8, 0.4, 0.1, 1.0 }; // Adjusted for a more orange ambient color
@@ -54,6 +63,15 @@ GLfloat mat_chair_diffuse[] = { 0.396, 0.263, 0.129, 5.0 }; // Darker brown diff
 GLfloat mat_chair_specular[] = { 0.396, 0.263, 0.129, 5.0 }; // Darker brown specular color
 GLfloat mat_chair_shininess = 2.0;
 ///------CHAIR COLOUR CODE END--------///
+
+
+
+
+
+
+
+
+///ADD COLOURS///
 
 
 
@@ -1048,6 +1066,19 @@ void Table_Master()
 }
 ///------TABLE VOID CODE END--------///
 
+////ADD VOID CODE///
+
+
+
+
+
+
+
+
+
+
+
+
 void myinit()
 {
     glViewport(0, 0, 50000, 50000);
@@ -1065,6 +1096,14 @@ void display()
     glLightfv(GL_LIGHT0, GL_DIFFUSE, b);
     glRotatef(10, 0.2, 1, 0.2);
 
+
+
+
+
+
+
+
+
     ///-----------LIGHT SOURCE CODE START--------///
     //Light_direction
     GLfloat light_direction[] = { -500.0, 500.0, -500.0, 0.0 };
@@ -1077,9 +1116,21 @@ void display()
     glEnable(GL_LIGHT0);
     ///-----------LIGHT SOURCE CODE END--------///
 
+
+
+
+
+
+
      ///------TABLE DISPLAY START--------///
     Table_Master();
     ///------TABLE DISPLAY END--------///
+
+
+    ///ADD METHODS///
+
+
+
 
     glFlush();
 }
