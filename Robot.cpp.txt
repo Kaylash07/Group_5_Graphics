@@ -1,0 +1,82 @@
+﻿#include <GL/glut.h>
+
+void drawRobot()
+{
+    // Body
+    glColor3f(0.5f, 0.5f, 0.5f);
+    glPushMatrix();
+    glTranslatef(0.0f, -0.25f, 0.0f);
+    glScalef(1.0f, 1.5f, 0.5f);
+    glutSolidCube(1.0);
+    glPopMatrix();
+
+    // Head
+    glColor3f(0.8f, 0.8f, 0.8f);
+    glPushMatrix();
+    glTranslatef(0.0f, 0.6f, 0.0f);
+    glutSolidSphere(0.3f, 20, 20);
+    glPopMatrix();
+
+    // Eyes
+    glColor3f(0.0f, 0.0f, 0.0f);
+    glPushMatrix();
+    glTranslatef(-0.1f, 0.75f, 0.15f);
+    glutSolidSphere(0.05f, 10, 10);
+    glTranslatef(0.2f, 0.0f, 0.0f);
+    glutSolidSphere(0.05f, 10, 10);
+    glPopMatrix();
+
+    // Arms
+    glColor3f(0.5f, 0.5f, 0.5f);
+    glPushMatrix();
+    glTranslatef(-0.6f, 0.3f, 0.0f);
+    glScalef(0.2f, 0.5f, 0.2f);
+    glutSolidCube(1.0);
+    glTranslatef(1.2f, 0.0f, 0.0f);
+    glutSolidCube(1.0);
+    glPopMatrix();
+
+    // Legs
+    glColor3f(0.5f, 0.5f, 0.5f);
+    glPushMatrix();
+    glTranslatef(-0.2f, -1.0f, 0.0f);
+    glScalef(0.3f, 0.6f, 0.3f);
+    glutSolidCube(1.0);
+    glTranslatef(0.6f, 0.0f, 0.0f);
+    glutSolidCube(1.0);
+    glPopMatrix();
+}
+
+void display()
+{
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    glLoadIdentity();
+    glTranslatef(0.0f, 0.0f, -5.0f);
+    drawRobot();
+    glutSwapBuffers();
+}
+
+void reshape(int width, int height)
+{
+    if (height == 0) height = 1;
+    float aspect = (float)width / height;
+    glViewport(0, 0, width, height);
+    glMatrixMode(GL_PROJECTION);
+    glLoadIdentity();
+    gluPerspective(45.0, aspect, 0.1, 100.0);
+    glMatrixMode(GL_MODELVIEW);
+}
+
+int main(int argc, char** argv)
+{
+    glutInit(&argc, argv);
+    glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH);
+    glutInitWindowSize(800, 600);
+    glutCreateWindow("OpenGL Robot Example");
+    glutDisplayFunc(display);
+    glutReshapeFunc(reshape);
+    glEnable(GL_DEPTH_TEST);
+    glutMainLoop();
+    return 0;
+}
+

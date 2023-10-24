@@ -1,0 +1,14 @@
+﻿#ifndef ROBOT_H
+#define ROBOT_H
+
+#include <GL/glut.h>
+
+class Robot
+{
+    public:
+    void drawRobot();
+    void interactWithRobot();
+};
+
+#endif
+

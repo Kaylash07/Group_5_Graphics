@@ -1,0 +1,27 @@
+﻿void interactWithRobot()
+{
+    char str2[] = "Greetings, human! I am Robot 9000, your friendly robot companion.";
+    int l2 = strlen(str2); // see how many characters are in the text string.
+
+    glPushMatrix();
+
+    glColor3f(0.0f, 0.0f, 0.0f);
+
+    glRasterPos3f(-4.0f, 2.7f, -2.8); // location to start printing text
+    for (int i = 0; i < l2; i++) // loop until i is greater than l
+    {
+        glutBitmapCharacter(GLUT_BITMAP_TIMES_ROMAN_24, str2[i]); // Print a character on the screen
+    }
+
+    glPopMatrix();
+}
+
+void display()
+{
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    glLoadIdentity();
+    glTranslatef(0.0f, 0.0f, -5.0f);
+    drawRobot();
+    interactWithRobot(); // Call the robot interaction function
+    glutSwapBuffers();
+}

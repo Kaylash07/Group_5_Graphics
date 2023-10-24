@@ -7,18 +7,32 @@
 #include <glm/gtc/type_ptr.hpp>
 #include <cmath>
 
-///---------CAMERA CODE START--------///
+///--------------CAMERA CODE START---------///
 int width = 800;
 int height = 600;
 
-float cameraX = -800.0f;
-float cameraY = 0.0f;
-float cameraZ = -3000.0f;
-float cameraSpeed = 10.0f;
-float cameraRotationSpeed = 1.0f;
+// Camera parameters
+glm::vec3 cameraPosition = glm::vec3(-800.0f, 0.0f, 0.0f);
+glm::vec3 cameraFront = glm::vec3(1.0f, 0.0f, 0.0f);
+glm::vec3 cameraUp = glm::vec3(0.0f, 0.0f, 1.0f);
+float cameraSpeed = 20.0f;
+float cameraYaw = 0.0f;
+float cameraPitch = 0.0f;
 
-float cameraPitch = -90.0f;
-float cameraYaw = -360.0f;
+float lastMouseX = -1;
+float lastMouseY = -1;
+bool mouseIsPressed = false;
+
+// Function prototypes
+void reshape(int w, int h);
+void moveCamera(float offsetX, float offsetY, float offsetZ);
+void updateCameraView();
+void display();
+void keyboard(unsigned char key, int x, int y);
+void mouse(int button, int state, int x, int y);
+void motion(int x, int y);
+
+int main(int argc, char** argv);
 
 void reshape(int w, int h)
 {
@@ -27,28 +41,14 @@ void reshape(int w, int h)
     glViewport(0, 0, width, height);
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
-    gluPerspective(45.0, (double)width / (double)height, 1.0, 1000000.0);
+    gluPerspective(45.0, (double)width / (double)height, 1.0, 100000000.0);
     glMatrixMode(GL_MODELVIEW);
 }
 
-void moveCamera(float directionX, float directionY, float directionZ)
+void moveCamera(float offsetX, float offsetY, float offsetZ)
 {
-    glm::vec3 cameraFront;
-    cameraFront.x = cos(glm::radians(cameraYaw)) * cos(glm::radians(cameraPitch));
-    cameraFront.y = sin(glm::radians(cameraPitch));
-    cameraFront.z = sin(glm::radians(cameraYaw)) * cos(glm::radians(cameraPitch));
-
-    glm::vec3 cameraRight = glm::normalize(glm::cross(cameraFront, glm::vec3(0.0f, 0.0f, 1.0f)));
-    glm::vec3 cameraUp = glm::normalize(glm::cross(cameraRight, cameraFront));
-
-    glm::vec3 cameraPosition(cameraX, cameraY, cameraZ);
-    cameraPosition += directionX * cameraSpeed * cameraRight;
-    cameraPosition += directionY * cameraSpeed * cameraFront;
-    cameraPosition += directionZ * cameraSpeed * cameraUp;
-
-    cameraX = cameraPosition.x;
-    cameraY = cameraPosition.y;
-    cameraZ = cameraPosition.z;
+    glm::vec3 right = glm::cross(cameraFront, cameraUp);
+    cameraPosition += cameraSpeed * (offsetX * right + offsetY * cameraFront + offsetZ * cameraUp);
 }
 
 void keyboard(unsigned char key, int x, int y)
@@ -73,24 +73,7 @@ void keyboard(unsigned char key, int x, int y)
     case 'e': // Move backward
         moveCamera(0, 0, -1);
         break;
-    case 'j': // Turn left
-        cameraYaw -= cameraRotationSpeed;
-        break;
-    case 'l': // Turn right
-        cameraYaw += cameraRotationSpeed;
-        break;
-    case 'i': // Turn up
-        cameraPitch += cameraRotationSpeed;
-        if (cameraPitch > 89.0f)
-            cameraPitch = 89.0f;
-        break;
-    case 'k': // Turn down
-        cameraPitch -= cameraRotationSpeed;
-        if (cameraPitch < -89.0f)
-            cameraPitch = -89.0f;
-        break;
     }
-
     glutPostRedisplay();
 }
 
@@ -99,19 +82,54 @@ void updateCameraView()
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
 
-    glm::vec3 cameraFront;
-    cameraFront.x = cos(glm::radians(cameraYaw)) * cos(glm::radians(cameraPitch));
-    cameraFront.y = sin(glm::radians(cameraPitch));
-    cameraFront.z = sin(glm::radians(cameraYaw)) * cos(glm::radians(cameraPitch));
-
-    glm::vec3 cameraTarget = glm::vec3(cameraX, cameraY, cameraZ) + cameraFront;
-    glm::vec3 cameraUp = glm::vec3(0.0f, 0.0f, 1.0f);
-
-    glm::mat4 view = glm::lookAt(glm::vec3(cameraX, cameraY, cameraZ), cameraTarget, cameraUp);
+    glm::mat4 view = glm::lookAt(cameraPosition, cameraPosition + cameraFront, cameraUp);
     glLoadMatrixf(glm::value_ptr(view));
 }
-///---------CAMERA CODE END--------///
 
+void mouse(int button, int state, int x, int y)
+{
+    if (button == GLUT_LEFT_BUTTON)
+    {
+        if (state == GLUT_DOWN)
+        {
+            lastMouseX = x;
+            lastMouseY = y;
+            mouseIsPressed = true;
+        }
+        else
+        {
+            mouseIsPressed = false;
+        }
+    }
+}
+
+void motion(int x, int y)
+{
+    if (mouseIsPressed)
+    {
+        float deltaX = static_cast<float>(x - lastMouseX);
+        float deltaY = static_cast<float>(y - lastMouseY);
+        lastMouseX = x;
+        lastMouseY = y;
+
+        const float sensitivity = 0.1f;
+
+        cameraYaw += deltaX * sensitivity;
+        cameraPitch -= deltaY * sensitivity;
+
+        if (cameraPitch > 89.0f) cameraPitch = 89.0f;
+        if (cameraPitch < -89.0f) cameraPitch = -89.0f;
+
+        glm::vec3 front;
+        front.x = cos(glm::radians(cameraYaw)) * cos(glm::radians(cameraPitch));
+        front.y = sin(glm::radians(cameraPitch));
+        front.z = sin(glm::radians(cameraYaw)) * cos(glm::radians(cameraPitch));
+        cameraFront = glm::normalize(front);
+
+        glutPostRedisplay();
+    }
+}
+///--------------CAMERA CODE START---------///
 
 
 ////-------------CLASSROOM CODE START---------------////
@@ -183,6 +201,14 @@ GLfloat mat_chair_diffuse[] = { 0.396, 0.263, 0.129, 5.0 }; // Darker brown diff
 GLfloat mat_chair_specular[] = { 0.396, 0.263, 0.129, 5.0 }; // Darker brown specular color
 GLfloat mat_chair_shininess = 2.0;
 ///------CHAIR COLOUR CODE END--------///
+
+///------ROBOT COLOUR CODE START--------///
+//robot_colour
+GLfloat mat_robot_ambient[] = { 0.192, 0.192, 0.192, 1.0 }; // Dark silver ambient color
+GLfloat mat_robot_diffuse[] = { 0.192, 0.192, 0.192, 1.0 }; // Dark silver diffuse color
+GLfloat mat_robot_specular[] = { 0.509, 0.509, 0.509, 1.0 }; // Light silver specular color
+GLfloat mat_robot_shininess = 32.0; // Adjust the shininess for a metallic look
+///------ROBOT COLOUR CODE END--------///
 
 ///------SKY COLOUR CODE START--------///
 //sky_colour
@@ -1195,6 +1221,194 @@ void Chair_Master()
     glPopMatrix();
 }
 
+///------------------ROBOT CODE START---------------///
+
+void drawRobot()
+{
+    // Body
+    glColor3f(0.5f, 0.5f, 0.5f);
+    glPushMatrix();
+    glTranslatef(0.0f, -0.05f, 0.0f);
+    glScalef(0.8f, 0.5f, 0.3f);
+    glutSolidCube(1.0);
+    glPopMatrix();
+
+    glColor3f(0.5f, 0.5f, 0.5f);
+    glPushMatrix();
+    glTranslatef(0.0f, -0.45f, 0.0f);
+    glScalef(0.6f, 0.4f, 0.2f);
+    glutSolidCube(1.0);
+    glPopMatrix();
+
+    glColor3f(0.5f, 0.5f, 0.5f);
+    glPushMatrix();
+    glTranslatef(0.0f, -0.75f, 0.0f);
+    glScalef(0.4f, 0.9f, 0.1f);
+    glutSolidCube(1.0);
+    glPopMatrix();
+
+    glColor3f(0.5f, 0.5f, 0.5f);
+    glPushMatrix();
+    glTranslatef(0.0f, -1.2f, 0.0f);
+    glScalef(0.5f, 0.2f, 0.3f);
+    glutSolidCube(1.0);
+    glPopMatrix();
+
+    // Skeleton
+    glPushMatrix();
+    glTranslatef(0.0f, -0.25f, 0.0f);
+    glScalef(0.1f, 2.0f, 0.1f);
+    glutSolidCube(1.0);
+    glPopMatrix();
+
+    glPushMatrix();
+    glTranslatef(0.0f, 0.0f, 0.0f);
+    glScalef(1.5f, 0.1f, 0.1f);
+    glutSolidCube(1.0);
+    glPopMatrix();
+
+    glPushMatrix();
+    glTranslatef(0.0f, -1.2f, 0.0f);
+    glScalef(0.8f, 0.1f, 0.1f);
+    glutSolidCube(1.0);
+    glPopMatrix();
+
+    glPushMatrix();
+    glTranslatef(0.45f, -1.7f, 0.0f);
+    glScalef(0.1f, 1.0f, 0.1f);
+    glutSolidCube(1.0);
+    glPopMatrix();
+
+    glPushMatrix();
+    glTranslatef(-0.45f, -1.7f, 0.0f);
+    glScalef(0.1f, 1.0f, 0.1f);
+    glutSolidCube(1.0);
+    glPopMatrix();
+
+    glPushMatrix();
+    glTranslatef(-0.65f, -0.5f, 0.0f);
+    glScalef(0.1f, 1.0f, 0.1f);
+    glutSolidCube(1.0);
+    glPopMatrix();
+
+    glPushMatrix();
+    glTranslatef(0.65f, -0.5f, 0.0f);
+    glScalef(0.1f, 1.0f, 0.1f);
+    glutSolidCube(1.0);
+    glPopMatrix();
+
+    // Joints
+    glColor3f(0.8f, 0.8f, 0.8f);
+    glPushMatrix();
+    glTranslatef(-0.45f, -1.2f, 0.0f);
+    glutSolidSphere(0.15f, 20, 20);
+    glPopMatrix();
+
+    glColor3f(0.8f, 0.8f, 0.8f);
+    glPushMatrix();
+    glTranslatef(0.45f, -1.2f, 0.0f);
+    glutSolidSphere(0.15f, 20, 20);
+    glPopMatrix();
+
+    glColor3f(0.8f, 0.8f, 0.8f);
+    glPushMatrix();
+    glTranslatef(0.65f, 0.0f, 0.0f);
+    glutSolidSphere(0.15f, 20, 20);
+    glPopMatrix();
+
+    glColor3f(0.8f, 0.8f, 0.8f);
+    glPushMatrix();
+    glTranslatef(-0.65f, 0.0f, 0.0f);
+    glutSolidSphere(0.15f, 20, 20);
+    glPopMatrix();
+
+    // Head
+    glColor3f(5.0, 0.8f, 0.8f);
+    glPushMatrix();
+    glTranslatef(0.0f, 0.6f, 0.0f);
+    glutSolidSphere(0.3f, 20, 20);
+    glPopMatrix();
+
+    // Arms
+    glPushMatrix();
+    glTranslatef(0.65f, -0.2f, 0.0f);
+    glScalef(0.2f, 0.3f, 0.2f);
+    glutSolidCube(1.0);
+    glPopMatrix();
+
+    glPushMatrix();
+    glTranslatef(-0.65f, -0.2f, 0.0f);
+    glScalef(0.2f, 0.3f, 0.2f);
+    glutSolidCube(1.0);
+    glPopMatrix();
+
+    glPushMatrix();
+    glTranslatef(0.65f, -0.8f, 0.0f);
+    glScalef(0.2f, 0.4f, 0.2f);
+    glutSolidCube(1.0);
+    glPopMatrix();
+
+    glPushMatrix();
+    glTranslatef(-0.65f, -0.8f, 0.0f);
+    glScalef(0.2f, 0.4f, 0.2f);
+    glutSolidCube(1.0);
+    glPopMatrix();
+
+    // Legs
+    glPushMatrix();
+    glTranslatef(0.45f, -2.0f, 0.0f);
+    glScalef(0.2f, 0.3f, 0.2f);
+    glutSolidCube(1.0);
+    glPopMatrix();
+
+    glPushMatrix();
+    glTranslatef(-0.45f, -2.0f, 0.0f);
+    glScalef(0.2f, 0.3f, 0.2f);
+    glutSolidCube(1.0);
+    glPopMatrix();
+
+    glPushMatrix();
+    glTranslatef(0.45f, -1.5f, 0.0f);
+    glScalef(0.2f, 0.4f, 0.2f);
+    glutSolidCube(1.0);
+    glPopMatrix();
+
+    glPushMatrix();
+    glTranslatef(-0.45f, -1.5f, 0.0f);
+    glScalef(0.2f, 0.4f, 0.2f);
+    glutSolidCube(1.0);
+    glPopMatrix();
+
+    //feet
+    glPushMatrix();
+    glTranslatef(0.50f, -2.2f, 0.0f);
+    glScalef(0.4f, 0.1f, 0.2f);
+    glutSolidCube(1.0);
+    glPopMatrix();
+
+    glPushMatrix();
+    glTranslatef(-0.50f, -2.2f, 0.0f);
+    glScalef(0.4f, 0.1f, 0.2f);
+    glutSolidCube(1.0);
+    glPopMatrix();
+}
+
+void robot()
+{
+    glMaterialfv(GL_FRONT, GL_AMBIENT, mat_robot_ambient);
+    glMaterialfv(GL_FRONT, GL_DIFFUSE, mat_robot_diffuse);
+    glMaterialfv(GL_FRONT, GL_SPECULAR, mat_robot_specular);
+    glMaterialf(GL_FRONT, GL_SHININESS, mat_robot_shininess);
+
+    glPushMatrix();
+    glTranslatef(100, 190, 0);
+    glScalef(80, 80, 80);
+    glRotatef(200, 0, 1, 0);
+    drawRobot();
+    glPopMatrix();
+}
+///------------------ROBOT CODE END---------------///
+
 //Tables
 void Table1()
 {
@@ -1223,6 +1437,8 @@ void Table1()
     screen();
 
     Chair_Master();
+
+    robot();
 }
 void Table2()
 {
@@ -1301,11 +1517,12 @@ void CLASSROOM_MASTER()
 {
     glPushMatrix();
     glTranslatef(-1000, 0, -1000);
-    Classroom();
-    Table_Master();
+    Classroom(); //walls,floor, ceiling
+    Table_Master();//all table components, desktop and towers
     Sky();
     glPopMatrix();
 }
+
 void display()
 {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -1313,20 +1530,20 @@ void display()
     // Apply camera transformation
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
-    updateCameraView(); // This function applies the camera position and orientation
+    updateCameraView();
 
     // Set up lighting
-    GLfloat light_direction[] = { -500.0, 500.0, -500.0, 0.0 };
+    GLfloat light_position[] = { -500.0, 500.0, -500.0, 0.0 };
     GLfloat light_color[] = { 1.0, 1.0, 0.9, 1.0 };
 
-    glLightfv(GL_LIGHT0, GL_POSITION, light_direction);
+    glLightfv(GL_LIGHT0, GL_POSITION, light_position);
     glLightfv(GL_LIGHT0, GL_DIFFUSE, light_color);
 
     glEnable(GL_LIGHTING);
     glEnable(GL_LIGHT0);
 
-    // Add your objects to the scene
-    CLASSROOM_MASTER(); // Example function, replace with your own objects
+    // Displays objects to the scene
+    CLASSROOM_MASTER(); //Contains ALL components of the class
 
     glutSwapBuffers();
 }
@@ -1344,6 +1561,9 @@ int main(int argc, char** argv)
     glutReshapeFunc(reshape);
     glutDisplayFunc(display);
     glutKeyboardFunc(keyboard);
+    glutMouseFunc(mouse);
+    glutMotionFunc(motion);
+
 
     // Enable or disable OpenGL features as needed.
     glEnable(GL_LIGHTING);
@@ -1354,3 +1574,5 @@ int main(int argc, char** argv)
 
     glutMainLoop();
 }
+
+
