@@ -13,24 +13,19 @@ int height = 600;
 
 // Camera parameters
 glm::vec3 cameraPosition = glm::vec3(-800.0f, 0.0f, 0.0f);
-glm::vec3 cameraFront = glm::vec3(1.0f, 0.0f, 0.0f);
-glm::vec3 cameraUp = glm::vec3(0.0f, 0.0f, 1.0f);
+glm::vec3 cameraFront = glm::vec3(0.0f, 0.0f, 0.0f);
+glm::vec3 cameraUp = glm::vec3(0.0f, 1.0f, 0.0f);
 float cameraSpeed = 20.0f;
 float cameraYaw = 0.0f;
 float cameraPitch = 0.0f;
 
-float lastMouseX = -1;
-float lastMouseY = -1;
-bool mouseIsPressed = false;
-
 // Function prototypes
 void reshape(int w, int h);
 void moveCamera(float offsetX, float offsetY, float offsetZ);
+void rotateCamera(float pitchOffset, float yawOffset);
 void updateCameraView();
 void display();
 void keyboard(unsigned char key, int x, int y);
-void mouse(int button, int state, int x, int y);
-void motion(int x, int y);
 
 int main(int argc, char** argv);
 
@@ -51,27 +46,57 @@ void moveCamera(float offsetX, float offsetY, float offsetZ)
     cameraPosition += cameraSpeed * (offsetX * right + offsetY * cameraFront + offsetZ * cameraUp);
 }
 
+void rotateCamera(float pitchOffset, float yawOffset)
+{
+    const float sensitivity = 15.0f;
+    cameraYaw += yawOffset * sensitivity;
+    cameraPitch += pitchOffset * sensitivity;
+
+    if (cameraPitch > 89.0f) cameraPitch = 89.0f;
+    if (cameraPitch < -89.0f) cameraPitch = -89.0f;
+
+    glm::vec3 front;
+    front.x = cos(glm::radians(cameraYaw)) * cos(glm::radians(cameraPitch));
+    front.y = sin(glm::radians(cameraPitch));
+    front.z = sin(glm::radians(cameraYaw)) * cos(glm::radians(cameraPitch));
+    cameraFront = glm::normalize(front);
+
+    glutPostRedisplay();
+}
+
 void keyboard(unsigned char key, int x, int y)
 {
     switch (key)
     {
-    case 'a': // Move or turn left
+    case 'a': // Move camera left along the x-axis
         moveCamera(-1, 0, 0);
         break;
-    case 'd': // Move or turn right
+    case 'd': // Move camera right along the x-axis
         moveCamera(1, 0, 0);
         break;
-    case 'w': // Move or turn up
+    case 'w': // Move camera up along the y-axis
         moveCamera(0, 1, 0);
         break;
-    case 's': // Move or turn down
+    case 's': // Move camera down along the y-axis
         moveCamera(0, -1, 0);
         break;
-    case 'q': // Move forward
+    case 'q': // Move camera forward along the z-axis
         moveCamera(0, 0, 1);
         break;
-    case 'e': // Move backward
+    case 'e': // Move camera backward along the z-axis
         moveCamera(0, 0, -1);
+        break;
+    case 'j': // Rotate camera left
+        rotateCamera(0, -1);
+        break;
+    case 'l': // Rotate camera right
+        rotateCamera(0, 1);
+        break;
+    case 'i': // Rotate camera up
+        rotateCamera(1, 0);
+        break;
+    case 'k': // Rotate camera down
+        rotateCamera(-1, 0);
         break;
     }
     glutPostRedisplay();
@@ -84,50 +109,6 @@ void updateCameraView()
 
     glm::mat4 view = glm::lookAt(cameraPosition, cameraPosition + cameraFront, cameraUp);
     glLoadMatrixf(glm::value_ptr(view));
-}
-
-void mouse(int button, int state, int x, int y)
-{
-    if (button == GLUT_LEFT_BUTTON)
-    {
-        if (state == GLUT_DOWN)
-        {
-            lastMouseX = x;
-            lastMouseY = y;
-            mouseIsPressed = true;
-        }
-        else
-        {
-            mouseIsPressed = false;
-        }
-    }
-}
-
-void motion(int x, int y)
-{
-    if (mouseIsPressed)
-    {
-        float deltaX = static_cast<float>(x - lastMouseX);
-        float deltaY = static_cast<float>(y - lastMouseY);
-        lastMouseX = x;
-        lastMouseY = y;
-
-        const float sensitivity = 0.1f;
-
-        cameraYaw += deltaX * sensitivity;
-        cameraPitch -= deltaY * sensitivity;
-
-        if (cameraPitch > 89.0f) cameraPitch = 89.0f;
-        if (cameraPitch < -89.0f) cameraPitch = -89.0f;
-
-        glm::vec3 front;
-        front.x = cos(glm::radians(cameraYaw)) * cos(glm::radians(cameraPitch));
-        front.y = sin(glm::radians(cameraPitch));
-        front.z = sin(glm::radians(cameraYaw)) * cos(glm::radians(cameraPitch));
-        cameraFront = glm::normalize(front);
-
-        glutPostRedisplay();
-    }
 }
 ///--------------CAMERA CODE START---------///
 
@@ -1561,8 +1542,6 @@ int main(int argc, char** argv)
     glutReshapeFunc(reshape);
     glutDisplayFunc(display);
     glutKeyboardFunc(keyboard);
-    glutMouseFunc(mouse);
-    glutMotionFunc(motion);
 
 
     // Enable or disable OpenGL features as needed.
