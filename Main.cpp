@@ -110,7 +110,7 @@ void updateCameraView()
     glm::mat4 view = glm::lookAt(cameraPosition, cameraPosition + cameraFront, cameraUp);
     glLoadMatrixf(glm::value_ptr(view));
 }
-///--------------CAMERA CODE START---------///
+///--------------CAMERA CODE END---------///
 
 
 ////-------------CLASSROOM CODE START---------------////
@@ -130,26 +130,7 @@ GLfloat mat_ceiling_ambient[] = { 0.8, 0.8, 0.8, 1.0 }; // Adjusted for light gr
 GLfloat mat_ceiling_diffuse[] = { 0.8, 0.8, 0.8, 1.0 }; // Adjusted for light gray diffuse color
 GLfloat mat_ceiling_specular[] = { 0.2, 0.2, 0.2, 1.0 }; // You can keep the specular color the same
 GLfloat mat_ceiling_shininess = 10.0; // You can adjust shininess as desired
-
-
-
-
-
-
 ///------CLASSROOM CODE COLOUR CODE END--------///
-
-
-
-
-
-///ADD LIBRARIES///
-
-
-
-
-
-
-
 
 ///------TABLE COLOUR CODE START--------///
 //table_surface_colour
@@ -191,6 +172,32 @@ GLfloat mat_robot_specular[] = { 0.509, 0.509, 0.509, 1.0 }; // Light silver spe
 GLfloat mat_robot_shininess = 32.0; // Adjust the shininess for a metallic look
 ///------ROBOT COLOUR CODE END--------///
 
+///------HUMAN COLOUR CODE START--------///
+//upper_body
+GLfloat mat_upperbody_ambient[] = { 1.0, 0.0, 0.0, 1.0 }; // Red ambient color
+GLfloat mat_upperbody_diffuse[] = { 1.0, 0.0, 0.0, 1.0 }; // Red diffuse color
+GLfloat mat_upperbody_specular[] = { 0.0, 0.0, 0.0, 1.0 }; // No specular for cloth-like appearance
+GLfloat mat_upperbody_shininess = 15.0; // Adjust the shininess for a cloth-like look
+
+//upper_body
+GLfloat mat_lowerbody_ambient[] = { 0.0, 0.0, 0.2, 1.0 }; // Dark blue ambient color for denim
+GLfloat mat_lowerbody_diffuse[] = { 0.0, 0.0, 0.4, 1.0 }; // Slightly lighter blue diffuse color for denim
+GLfloat mat_lowerbody_specular[] = { 0.2, 0.2, 0.2, 1.0 }; // Some low-level specular highlights for denim
+GLfloat mat_lowerbody_shininess = 25.0; // Adjusted shininess for denim appearance
+
+//skin_body
+GLfloat mat_skin_ambient[] = { 0.8, 0.6, 0.5, 1.0 }; // Skin-like ambient color
+GLfloat mat_skin_diffuse[] = { 0.8, 0.6, 0.5, 1.0 }; // Skin-like diffuse color
+GLfloat mat_skin_specular[] = { 0.2, 0.2, 0.2, 1.0 }; // Low-intensity specular for skin
+GLfloat mat_skin_shininess = 30.0; // Adjust the shininess for a skin-like look
+
+//shoes_body
+GLfloat mat_shoes_ambient[] = { 0.1, 0.1, 0.1, 1.0 }; // Dark ambient color for black leather
+GLfloat mat_shoes_diffuse[] = { 0.1, 0.1, 0.1, 1.0 }; // Dark diffuse color for black leather
+GLfloat mat_shoes_specular[] = { 0.2, 0.2, 0.2, 1.0 }; // Low-intensity specular for leather
+GLfloat mat_shoes_shininess = 80.0; // Adjust the shininess for a leather-like look
+///------HUMAN COLOUR CODE END--------///
+
 ///------SKY COLOUR CODE START--------///
 //sky_colour
 GLfloat mat_sky_ambient[] = { 0.529, 0.808, 0.922, 1.0 }; // Light blue ambient color
@@ -198,20 +205,6 @@ GLfloat mat_sky_diffuse[] = { 0.529, 0.808, 0.922, 1.0 }; // Light blue diffuse 
 GLfloat mat_sky_specular[] = { 0.529, 0.808, 0.922, 1.0 }; // Light blue specular color
 GLfloat mat_sky_shininess = 30.0; // Adjust the shininess as needed
 ///------SKY COLOUR CODE END--------///
-
-
-
-
-
-
-
-
-
-
-
-///ADD COLOURS///
-
-
 
 ///------SKY VOID CODE START--------///
 void Sky()
@@ -1360,7 +1353,7 @@ void drawRobot()
     glutSolidCube(1.0);
     glPopMatrix();
 
-    //feet
+    //shoes
     glPushMatrix();
     glTranslatef(0.50f, -2.2f, 0.0f);
     glScalef(0.4f, 0.1f, 0.2f);
@@ -1389,6 +1382,199 @@ void robot()
     glPopMatrix();
 }
 ///------------------ROBOT CODE END---------------///
+
+///------------------HUMAN CODE START---------------///
+    // Body
+void Upperbody()
+{
+    glMaterialfv(GL_FRONT, GL_AMBIENT, mat_upperbody_ambient);
+    glMaterialfv(GL_FRONT, GL_DIFFUSE, mat_upperbody_diffuse);
+    glMaterialfv(GL_FRONT, GL_SPECULAR, mat_upperbody_specular);
+    glMaterialf(GL_FRONT, GL_SHININESS, mat_upperbody_shininess);
+
+    glColor3f(0.5f, 0.5f, 0.5f);
+    glPushMatrix();
+    glTranslatef(0.0f, -0.05f, 0.0f);
+    glScalef(0.8f, 0.5f, 0.3f);
+    glutSolidCube(1.0);
+    glPopMatrix();
+
+    glColor3f(0.5f, 0.5f, 0.5f);
+    glPushMatrix();
+    glTranslatef(0.0f, -0.45f, 0.0f);
+    glScalef(0.6f, 0.9f, 0.2f);
+    glutSolidCube(1.0);
+    glPopMatrix();
+
+    // Arms
+        glPushMatrix();
+        glTranslatef(0.45f, -0.3f, 0.0f);
+        glScalef(0.2f, 1.0f, 0.2f);
+        glutSolidCube(1.0);
+        glPopMatrix();
+
+        glPushMatrix();
+        glTranslatef(-0.45f, -0.3f, 0.0f);
+        glScalef(0.2f, 1.0f, 0.2f);
+        glutSolidCube(1.0);
+        glPopMatrix();
+}
+
+    // Skeleton
+void skeleton()
+{
+    glMaterialfv(GL_FRONT, GL_AMBIENT, mat_skin_ambient);
+    glMaterialfv(GL_FRONT, GL_DIFFUSE, mat_skin_diffuse);
+    glMaterialfv(GL_FRONT, GL_SPECULAR, mat_skin_specular);
+    glMaterialf(GL_FRONT, GL_SHININESS, mat_skin_shininess);
+
+    glPushMatrix();
+    glTranslatef(0.0f, -0.15f, 0.0f);
+    glScalef(0.1f, 1.5f, 0.1f);
+    glutSolidCube(1.0);
+    glPopMatrix();
+
+
+    glPushMatrix();
+    glTranslatef(-0.45f, -0.5f, 0.0f);
+    glScalef(0.1f, 1.0f, 0.1f);
+    glutSolidCube(1.0);
+    glPopMatrix();
+
+    glPushMatrix();
+    glTranslatef(0.45f, -0.5f, 0.0f);
+    glScalef(0.1f, 1.0f, 0.1f);
+    glutSolidCube(1.0);
+    glPopMatrix();
+}
+
+    // Joints
+void joints()
+{
+    glColor3f(0.8f, 0.8f, 0.8f);
+    glPushMatrix();
+    glTranslatef(-0.45f, -1.2f, 0.0f);
+    glutSolidSphere(0.15f, 20, 20);
+    glPopMatrix();
+
+    glColor3f(0.8f, 0.8f, 0.8f);
+    glPushMatrix();
+    glTranslatef(0.45f, -1.2f, 0.0f);
+    glutSolidSphere(0.15f, 20, 20);
+    glPopMatrix();
+
+    glColor3f(0.8f, 0.8f, 0.8f);
+    glPushMatrix();
+    glTranslatef(0.65f, 0.0f, 0.0f);
+    glutSolidSphere(0.15f, 20, 20);
+    glPopMatrix();
+
+    glColor3f(0.8f, 0.8f, 0.8f);
+    glPushMatrix();
+    glTranslatef(-0.65f, 0.0f, 0.0f);
+    glutSolidSphere(0.15f, 20, 20);
+    glPopMatrix();
+}
+
+    // Head
+void head()
+{
+    glMaterialfv(GL_FRONT, GL_AMBIENT, mat_skin_ambient);
+    glMaterialfv(GL_FRONT, GL_DIFFUSE, mat_skin_diffuse);
+    glMaterialfv(GL_FRONT, GL_SPECULAR, mat_skin_specular);
+    glMaterialf(GL_FRONT, GL_SHININESS, mat_skin_shininess);
+
+    glColor3f(5.0, 0.8f, 0.8f);
+    glPushMatrix();
+    glTranslatef(0.0f, 0.6f, 0.0f);
+    glutSolidSphere(0.3f, 20, 20);
+    glPopMatrix();
+}
+
+void lowerbody()
+{
+    glMaterialfv(GL_FRONT, GL_AMBIENT, mat_lowerbody_ambient);
+    glMaterialfv(GL_FRONT, GL_DIFFUSE, mat_lowerbody_diffuse);
+    glMaterialfv(GL_FRONT, GL_SPECULAR, mat_lowerbody_specular);
+    glMaterialf(GL_FRONT, GL_SHININESS, mat_lowerbody_shininess);
+
+    // Legs
+    glPushMatrix();
+    glTranslatef(0.18f, -1.6f, 0.0f);
+    glScalef(0.25f, 1.4f, 0.2f);
+    glutSolidCube(1.0);
+    glPopMatrix();
+
+    glPushMatrix();
+    glTranslatef(-0.18f, -1.6f, 0.0f);
+    glScalef(0.25f, 1.4f, 0.2f);
+    glutSolidCube(1.0);
+    glPopMatrix();
+
+    glPushMatrix();
+    glTranslatef(0.0f, -1.0f, 0.0f);
+    glScalef(0.3f, 0.2f, 0.2f);
+    glutSolidCube(1.0);
+    glPopMatrix();
+
+}
+
+    //shoes
+void shoes()
+{
+    glMaterialfv(GL_FRONT, GL_AMBIENT, mat_shoes_ambient);
+    glMaterialfv(GL_FRONT, GL_DIFFUSE, mat_shoes_diffuse);
+    glMaterialfv(GL_FRONT, GL_SPECULAR, mat_shoes_specular);
+    glMaterialf(GL_FRONT, GL_SHININESS, mat_shoes_shininess);
+
+    glPushMatrix();
+    glTranslatef(0.20f, -2.3f, -0.05f);
+    glScalef(0.2f, 0.15f, 0.3f);
+    glutSolidCube(1.0);
+    glPopMatrix();
+
+    glPushMatrix();
+    glTranslatef(-0.20f, -2.3f, -0.05f);
+    glScalef(0.2f, 0.15f, 0.3f);
+    glutSolidCube(1.0);
+    glPopMatrix();
+}
+
+void human()
+{
+    glMaterialfv(GL_FRONT, GL_AMBIENT, mat_robot_ambient);
+    glMaterialfv(GL_FRONT, GL_DIFFUSE, mat_robot_diffuse);
+    glMaterialfv(GL_FRONT, GL_SPECULAR, mat_robot_specular);
+    glMaterialf(GL_FRONT, GL_SHININESS, mat_robot_shininess);
+
+    glPushMatrix();
+    glTranslatef(100, 70, -300);
+    glScalef(150, 200, 150);
+    glRotatef(180, 0, 1, 0);
+    head();
+    Upperbody();
+    skeleton();
+    lowerbody();
+    shoes();
+    glPopMatrix();
+}
+
+void HUMAN_MASTER()
+{
+    glPushMatrix();
+    glTranslatef(-200, 0, 0);
+    human();
+    glPopMatrix();
+
+    glPushMatrix();
+    glTranslatef(70, 0, 0);
+    glRotatef(180, 0, 1, 0);
+    human();
+    glPopMatrix();
+
+    human();
+}
+///------------------HUMAN CODE END---------------///
 
 //Tables
 void Table1()
@@ -1420,6 +1606,14 @@ void Table1()
     Chair_Master();
 
     robot();
+
+    glPushMatrix();
+    glTranslatef(100, 0, 0);
+    HUMAN_MASTER();
+    glPopMatrix();
+    
+
+
 }
 void Table2()
 {
