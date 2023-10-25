@@ -203,326 +203,64 @@ GLfloat mat_shoes_specular[] = { 0.2, 0.2, 0.2, 1.0 }; // Low-intensity specular
 GLfloat mat_shoes_shininess = 80.0; // Adjust the shininess for a leather-like look
 ///------HUMAN COLOUR CODE END--------///
 
-///------SKY COLOUR CODE START--------///
-//sky_colour
-GLfloat mat_sky_ambient[] = { 0.529, 0.808, 0.922, 1.0 }; // Light blue ambient color
-GLfloat mat_sky_diffuse[] = { 0.529, 0.808, 0.922, 1.0 }; // Light blue diffuse color
-GLfloat mat_sky_specular[] = { 0.529, 0.808, 0.922, 1.0 }; // Light blue specular color
-GLfloat mat_sky_shininess = 30.0; // Adjust the shininess as needed
-///------SKY COLOUR CODE END--------///
-
 ///------SKY VOID CODE START--------///
-void Sky()
+void Skybox()
 {
-    glMaterialfv(GL_FRONT, GL_AMBIENT, mat_sky_ambient);
-    glMaterialfv(GL_FRONT, GL_DIFFUSE, mat_sky_diffuse);
-    glMaterialfv(GL_FRONT, GL_SPECULAR, mat_sky_specular);
-    glMaterialf(GL_FRONT, GL_SHININESS, mat_sky_shininess);
+    glDisable(GL_LIGHTING);
 
     glPushMatrix();
-    glTranslated(-5000, 700, -400);
-    glScalef(1, 10000, 10000);
-    glutSolidCube(1.0);
-    glPopMatrix();
+    glTranslated(0, 0, 0);
+    glScalef(10000, 10000, 10000);
 
+    glColor3f(0.529, 0.808, 0.980); // Light blue color
+
+    glBegin(GL_QUADS);
+
+    // Front face
+    glVertex3f(-0.5, -0.5, -0.5);
+    glVertex3f(0.5, -0.5, -0.5);
+    glVertex3f(0.5, 0.5, -0.5);
+    glVertex3f(-0.5, 0.5, -0.5);
+
+    // Back face
+    glVertex3f(-0.5, -0.5, 0.5);
+    glVertex3f(0.5, -0.5, 0.5);
+    glVertex3f(0.5, 0.5, 0.5);
+    glVertex3f(-0.5, 0.5, 0.5);
+
+    // Left face
+    glVertex3f(-0.5, -0.5, -0.5);
+    glVertex3f(-0.5, 0.5, -0.5);
+    glVertex3f(-0.5, 0.5, 0.5);
+    glVertex3f(-0.5, -0.5, 0.5);
+
+    // Right face
+    glVertex3f(0.5, -0.5, -0.5);
+    glVertex3f(0.5, 0.5, -0.5);
+    glVertex3f(0.5, 0.5, 0.5);
+    glVertex3f(0.5, -0.5, 0.5);
+
+    // Top face
+    glVertex3f(-0.5, 0.5, -0.5);
+    glVertex3f(0.5, 0.5, -0.5);
+    glVertex3f(0.5, 0.5, 0.5);
+    glVertex3f(-0.5, 0.5, 0.5);
+
+    // Bottom face
+    glVertex3f(-0.5, -0.5, -0.5);
+    glVertex3f(0.5, -0.5, -0.5);
+    glVertex3f(0.5, -0.5, 0.5);
+    glVertex3f(-0.5, -0.5, 0.5);
+
+    glEnd();
+
+    glPopMatrix();
+    glEnable(GL_LIGHTING);
 }
+
+
 ///------SKY VOID CODE END--------///
 
-
-///------CLASSROOM VOID CODE START--------///
-
-void floor()
-{
-    glMaterialfv(GL_FRONT, GL_AMBIENT, mat_floor_ambient);
-    glMaterialfv(GL_FRONT, GL_DIFFUSE, mat_floor_diffuse);
-    glMaterialfv(GL_FRONT, GL_SPECULAR, mat_floor_specular);
-    glMaterialf(GL_FRONT, GL_SHININESS, mat_floor_shininess);
-
-    glPushMatrix();
-    glTranslated(0, -430, -400);
-    glScalef(2500, 50, 3500);
-    glutSolidCube(1.0);
-    glPopMatrix();
-}
-
-void walls()
-{
-    glMaterialfv(GL_FRONT, GL_AMBIENT, mat_wall_ambient);
-    glMaterialfv(GL_FRONT, GL_DIFFUSE, mat_wall_diffuse);
-    glMaterialfv(GL_FRONT, GL_SPECULAR, mat_wall_specular);
-    glMaterialf(GL_FRONT, GL_SHININESS, mat_wall_shininess);
-//right wall
-    glPushMatrix();
-    glTranslated(1215, 345, -800);
-    glScalef(70, 1500, 2700);
-    glutSolidCube(1.0);
-    glPopMatrix();
-
-    glPushMatrix();
-    glTranslated(1215, 345, 1200);
-    glScalef(70, 1500, 300);
-    glutSolidCube(1.0);
-    glPopMatrix();
-
-    glPushMatrix();
-    glTranslated(1215, 800, -200);
-    glScalef(70, 600, 2700);
-    glutSolidCube(1.0);
-    glPopMatrix();
-
-//left wall
-    glPushMatrix();
-    glTranslated(-1215, -200, -400);
-    glScalef(70, 500, 3500);
-    glutSolidCube(1.0);
-    glPopMatrix();
-
-    glPushMatrix();
-    glTranslated(-1215, 1000, -400);
-    glScalef(70, 300, 3500);
-    glutSolidCube(1.0);
-    glPopMatrix();
-
-    glPushMatrix();
-    glTranslated(-1215, 345, 1200);
-    glScalef(70, 1500, 300);
-    glutSolidCube(1.0);
-    glPopMatrix();
-
-    glPushMatrix();
-    glTranslated(-1215, 345, -2000);
-    glScalef(70, 1500, 300);
-    glutSolidCube(1.0);
-    glPopMatrix();
-
-    glPushMatrix();
-    glTranslated(-1215, 345, -400);
-    glScalef(70, 1500, 150);
-    glutSolidCube(1.0);
-    glPopMatrix();
-
-//front an back wall
-    glPushMatrix();
-    glTranslated(0, 345, -2115);
-    glScalef(2360, 1500, 70);
-    glutSolidCube(1.0);
-    glPopMatrix();
-
-    glPushMatrix();
-    glTranslated(0, 345, 1315);
-    glScalef(2360, 1500, 70);
-    glutSolidCube(1.0);
-    glPopMatrix();
-}
-void ceiling()
-{
-    glMaterialfv(GL_FRONT, GL_AMBIENT, mat_ceiling_ambient);
-    glMaterialfv(GL_FRONT, GL_DIFFUSE, mat_ceiling_diffuse);
-    glMaterialfv(GL_FRONT, GL_SPECULAR, mat_ceiling_specular);
-    glMaterialf(GL_FRONT, GL_SHININESS, mat_ceiling_shininess);
-
-    glPushMatrix();
-    glTranslated(0, 1120, -400);
-    glScalef(2500, 50, 3500);
-    glutSolidCube(1.0);
-    glPopMatrix();
-}
-
-void windows()
-{
-    // Set up the material properties to make it transparent
-    GLfloat mat_glass_ambient[] = { 0.0, 0.0, 0.0, 0.3 };  // Low ambient color
-    GLfloat mat_glass_diffuse[] = { 0.0, 0.0, 0.0, 0.3 };  // Low diffuse color
-    GLfloat mat_glass_specular[] = { 0.5, 0.5, 0.5, 0.3 }; // Low specular color
-    GLfloat mat_glass_shininess = 32.0;  // Adjust shininess as needed
-
-    glMaterialfv(GL_FRONT, GL_AMBIENT, mat_glass_ambient);
-    glMaterialfv(GL_FRONT, GL_DIFFUSE, mat_glass_diffuse);
-    glMaterialfv(GL_FRONT, GL_SPECULAR, mat_glass_specular);
-    glMaterialf(GL_FRONT, GL_SHININESS, mat_glass_shininess);
-
-    // Enable blending for transparency
-    glEnable(GL_BLEND);
-    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-
-    glPushMatrix();
-    glTranslated(-1235, 500, -400);
-    glScalef(5, 1000, 3500);
-    glRotatef(180, 1, 0, 0);
-    glutSolidCube(1.0);
-    glPopMatrix();
-
-    // Disable blending to restore the default rendering
-    glDisable(GL_BLEND);
-}
-
-void window_pane()
-{
-    GLfloat mat_windowpane_ambient[] = { 0.19225, 0.19225, 0.19225, 1.0 };  // Silver ambient color
-    GLfloat mat_windowpane_diffuse[] = { 0.50754, 0.50754, 0.50754, 1.0 };  // Silver diffuse color
-    GLfloat mat_windowpane_specular[] = { 0.508273, 0.508273, 0.508273, 1.0 }; // Silver specular color
-    GLfloat mat_windowpane_shininess = 51.2;  // Adjust shininess as needed
-
-    glMaterialfv(GL_FRONT, GL_AMBIENT, mat_windowpane_ambient);
-    glMaterialfv(GL_FRONT, GL_DIFFUSE, mat_windowpane_diffuse);
-    glMaterialfv(GL_FRONT, GL_SPECULAR, mat_windowpane_specular);
-    glMaterialf(GL_FRONT, GL_SHININESS, mat_windowpane_shininess);
-
-    glPushMatrix();
-    glTranslated(-1235, 60, -400);
-    glScalef(10, 20, 3500);
-    glRotatef(180, 1, 0, 0);
-    glutSolidCube(1.0);
-    glPopMatrix();
-
-    glPushMatrix();
-    glTranslated(-1235, 840, -400);
-    glScalef(10, 20, 3500);
-    glRotatef(180, 1, 0, 0);
-    glutSolidCube(1.0);
-    glPopMatrix();
-
-    glPushMatrix();
-    glTranslated(-1235, 600, -400);
-    glScalef(10, 20, 3500);
-    glRotatef(180, 1, 0, 0);
-    glutSolidCube(1.0);
-    glPopMatrix();
-
-    glPushMatrix();
-    glTranslated(-1235, 300, -400);
-    glScalef(10, 20, 3500);
-    glRotatef(180, 1, 0, 0);
-    glutSolidCube(1.0);
-    glPopMatrix();
-
-    glPushMatrix();
-    glTranslated(-1235, 450, -315);
-    glScalef(10, 1000, 20);
-    glRotatef(180, 1, 0, 0);
-    glutSolidCube(1.0);
-    glPopMatrix();
-
-    glPushMatrix();
-    glTranslated(-1235, 450, -485);
-    glScalef(10, 1000, 20);
-    glRotatef(180, 1, 0, 0);
-    glutSolidCube(1.0);
-    glPopMatrix();
-
-    glPushMatrix();
-    glTranslated(-1235, 450, -905);
-    glScalef(10, 1000, 20);
-    glRotatef(180, 1, 0, 0);
-    glutSolidCube(1.0);
-    glPopMatrix();
-
-    glPushMatrix();
-    glTranslated(-1235, 450, -1405);
-    glScalef(10, 1000, 20);
-    glRotatef(180, 1, 0, 0);
-    glutSolidCube(1.0);
-    glPopMatrix();
-
-    glPushMatrix();
-    glTranslated(-1235, 450, -1840);
-    glScalef(10, 1000, 20);
-    glRotatef(180, 1, 0, 0);
-    glutSolidCube(1.0);
-    glPopMatrix();
-
-    glPushMatrix();
-    glTranslated(-1235, 450, 1040);
-    glScalef(10, 1000, 20);
-    glRotatef(180, 1, 0, 0);
-    glutSolidCube(1.0);
-    glPopMatrix();
-
-    glPushMatrix();
-    glTranslated(-1235, 450, 105);
-    glScalef(10, 1000, 20);
-    glRotatef(180, 1, 0, 0);
-    glutSolidCube(1.0);
-    glPopMatrix();
-
-    glPushMatrix();
-    glTranslated(-1235, 450, 605);
-    glScalef(10, 1000, 20);
-    glRotatef(180, 1, 0, 0);
-    glutSolidCube(1.0);
-    glPopMatrix();
-}
-
-void door()
-{
-    GLfloat mat_door_ambient[] = { 0.7, 0.7, 0.0, 1.0 }; // Yellow ambient color
-    GLfloat mat_door_diffuse[] = { 0.7, 0.7, 0.0, 1.0 }; // Yellow diffuse color
-    GLfloat mat_door_specular[] = { 0.9, 0.9, 0.9, 1.0 }; // Specular color
-    GLfloat mat_door_shininess = 30.0; // Adjust shininess as needed
-
-    glMaterialfv(GL_FRONT, GL_AMBIENT, mat_door_ambient);
-    glMaterialfv(GL_FRONT, GL_DIFFUSE, mat_door_diffuse);
-    glMaterialfv(GL_FRONT, GL_SPECULAR, mat_door_specular);
-    glMaterialf(GL_FRONT, GL_SHININESS, mat_door_shininess);
-
-    glPushMatrix();
-    glTranslated(1215, 100, 800);
-    glScalef(40, 1000, 500);
-    glRotatef(180, 1, 0, 0);
-    glutSolidCube(1.0);
-    glPopMatrix();
-
-    glPushMatrix();
-    glTranslated(1215, 80, 1050);
-    glScalef(60, 1000, 50);
-    glRotatef(180, 1, 0, 0);
-    glutSolidCube(1.0);
-    glPopMatrix();
-
-    glPushMatrix();
-    glTranslated(1215, 80, 550);
-    glScalef(60, 1000, 50);
-    glRotatef(180, 1, 0, 0);
-    glutSolidCube(1.0);
-    glPopMatrix();
-
-    glPushMatrix();
-    glTranslated(1215, 500, 800);
-    glScalef(60, 50, 500);
-    glRotatef(180, 1, 0, 0);
-    glutSolidCube(1.0);
-    glPopMatrix();
-
-    glPushMatrix();
-    glTranslated(1175, 50, 650);
-    glutSolidSphere(15.0f, 100, 100);
-    glPopMatrix();
-
-    glPushMatrix();
-    glTranslated(1190, 50, 650);
-    glScalef(30, 10, 10);
-    glutSolidCube(1.0);
-    glPopMatrix();
-
-    glPushMatrix();
-    glTranslated(1195, 50, 650);
-    glScalef(5, 50, 20);
-    glutSolidCube(1.0);
-    glPopMatrix();
-}
-
-void Classroom()
-{
-    glPushMatrix();
-    floor();
-    walls();
-    windows();
-    window_pane();
-    door();
-    ceiling();
-    glPopMatrix();
-}
-///------CLASSROOM VOID CODE END--------///
 ///------TABLE VOID CODE START--------///
 //Table
 void leg()
@@ -1904,18 +1642,472 @@ void Table_Master()
 }
 ///------TABLE VOID CODE END--------///
 
-////ADD VOID CODE///
+///------CLASSROOM VOID CODE START--------///
+
+void floor()
+{
+    glMaterialfv(GL_FRONT, GL_AMBIENT, mat_floor_ambient);
+    glMaterialfv(GL_FRONT, GL_DIFFUSE, mat_floor_diffuse);
+    glMaterialfv(GL_FRONT, GL_SPECULAR, mat_floor_specular);
+    glMaterialf(GL_FRONT, GL_SHININESS, mat_floor_shininess);
+
+    glPushMatrix();
+    glTranslated(0, -430, -400);
+    glScalef(2500, 50, 3500);
+    glutSolidCube(1.0);
+    glPopMatrix();
+}
+
+void walls()
+{
+    glMaterialfv(GL_FRONT, GL_AMBIENT, mat_wall_ambient);
+    glMaterialfv(GL_FRONT, GL_DIFFUSE, mat_wall_diffuse);
+    glMaterialfv(GL_FRONT, GL_SPECULAR, mat_wall_specular);
+    glMaterialf(GL_FRONT, GL_SHININESS, mat_wall_shininess);
+    //right wall
+    glPushMatrix();
+    glTranslated(1215, 345, -800);
+    glScalef(70, 1500, 2700);
+    glutSolidCube(1.0);
+    glPopMatrix();
+
+    glPushMatrix();
+    glTranslated(1215, 345, 1200);
+    glScalef(70, 1500, 300);
+    glutSolidCube(1.0);
+    glPopMatrix();
+
+    glPushMatrix();
+    glTranslated(1215, 800, -200);
+    glScalef(70, 600, 2700);
+    glutSolidCube(1.0);
+    glPopMatrix();
+
+    //left wall
+    glPushMatrix();
+    glTranslated(-1215, -200, -400);
+    glScalef(70, 500, 3500);
+    glutSolidCube(1.0);
+    glPopMatrix();
+
+    glPushMatrix();
+    glTranslated(-1215, 1000, -400);
+    glScalef(70, 300, 3500);
+    glutSolidCube(1.0);
+    glPopMatrix();
+
+    glPushMatrix();
+    glTranslated(-1215, 345, 1200);
+    glScalef(70, 1500, 300);
+    glutSolidCube(1.0);
+    glPopMatrix();
+
+    glPushMatrix();
+    glTranslated(-1215, 345, -2000);
+    glScalef(70, 1500, 300);
+    glutSolidCube(1.0);
+    glPopMatrix();
+
+    glPushMatrix();
+    glTranslated(-1215, 345, -400);
+    glScalef(70, 1500, 150);
+    glutSolidCube(1.0);
+    glPopMatrix();
+
+    //front an back wall
+    glPushMatrix();
+    glTranslated(0, 345, -2115);
+    glScalef(2360, 1500, 70);
+    glutSolidCube(1.0);
+    glPopMatrix();
+
+    glPushMatrix();
+    glTranslated(0, 345, 1315);
+    glScalef(2360, 1500, 70);
+    glutSolidCube(1.0);
+    glPopMatrix();
+}
+void ceiling()
+{
+    glMaterialfv(GL_FRONT, GL_AMBIENT, mat_ceiling_ambient);
+    glMaterialfv(GL_FRONT, GL_DIFFUSE, mat_ceiling_diffuse);
+    glMaterialfv(GL_FRONT, GL_SPECULAR, mat_ceiling_specular);
+    glMaterialf(GL_FRONT, GL_SHININESS, mat_ceiling_shininess);
+
+    glPushMatrix();
+    glTranslated(0, 1120, -400);
+    glScalef(2500, 50, 3500);
+    glutSolidCube(1.0);
+    glPopMatrix();
+}
+
+void windows()
+{
+    // Set up the material properties to make it transparent
+    GLfloat mat_glass_ambient[] = { 0.0, 0.0, 0.0, 0.3 };  // Low ambient color
+    GLfloat mat_glass_diffuse[] = { 0.0, 0.0, 0.0, 0.3 };  // Low diffuse color
+    GLfloat mat_glass_specular[] = { 0.5, 0.5, 0.5, 0.3 }; // Low specular color
+    GLfloat mat_glass_shininess = 32.0;  // Adjust shininess as needed
+
+    glMaterialfv(GL_FRONT, GL_AMBIENT, mat_glass_ambient);
+    glMaterialfv(GL_FRONT, GL_DIFFUSE, mat_glass_diffuse);
+    glMaterialfv(GL_FRONT, GL_SPECULAR, mat_glass_specular);
+    glMaterialf(GL_FRONT, GL_SHININESS, mat_glass_shininess);
+
+    // Enable blending for transparency
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+    glPushMatrix();
+    glTranslated(-1235, 500, -400);
+    glScalef(5, 1000, 3500);
+    glRotatef(180, 1, 0, 0);
+    glutSolidCube(1.0);
+    glPopMatrix();
+
+    // Disable blending to restore the default rendering
+    glDisable(GL_BLEND);
+}
+
+void window_pane()
+{
+    GLfloat mat_windowpane_ambient[] = { 0.19225, 0.19225, 0.19225, 1.0 };  // Silver ambient color
+    GLfloat mat_windowpane_diffuse[] = { 0.50754, 0.50754, 0.50754, 1.0 };  // Silver diffuse color
+    GLfloat mat_windowpane_specular[] = { 0.508273, 0.508273, 0.508273, 1.0 }; // Silver specular color
+    GLfloat mat_windowpane_shininess = 51.2;  // Adjust shininess as needed
+
+    glMaterialfv(GL_FRONT, GL_AMBIENT, mat_windowpane_ambient);
+    glMaterialfv(GL_FRONT, GL_DIFFUSE, mat_windowpane_diffuse);
+    glMaterialfv(GL_FRONT, GL_SPECULAR, mat_windowpane_specular);
+    glMaterialf(GL_FRONT, GL_SHININESS, mat_windowpane_shininess);
+
+    glPushMatrix();
+    glTranslated(-1235, 60, -400);
+    glScalef(10, 20, 3500);
+    glRotatef(180, 1, 0, 0);
+    glutSolidCube(1.0);
+    glPopMatrix();
+
+    glPushMatrix();
+    glTranslated(-1235, 840, -400);
+    glScalef(10, 20, 3500);
+    glRotatef(180, 1, 0, 0);
+    glutSolidCube(1.0);
+    glPopMatrix();
+
+    glPushMatrix();
+    glTranslated(-1235, 600, -400);
+    glScalef(10, 20, 3500);
+    glRotatef(180, 1, 0, 0);
+    glutSolidCube(1.0);
+    glPopMatrix();
+
+    glPushMatrix();
+    glTranslated(-1235, 300, -400);
+    glScalef(10, 20, 3500);
+    glRotatef(180, 1, 0, 0);
+    glutSolidCube(1.0);
+    glPopMatrix();
+
+    glPushMatrix();
+    glTranslated(-1235, 450, -315);
+    glScalef(10, 1000, 20);
+    glRotatef(180, 1, 0, 0);
+    glutSolidCube(1.0);
+    glPopMatrix();
+
+    glPushMatrix();
+    glTranslated(-1235, 450, -485);
+    glScalef(10, 1000, 20);
+    glRotatef(180, 1, 0, 0);
+    glutSolidCube(1.0);
+    glPopMatrix();
+
+    glPushMatrix();
+    glTranslated(-1235, 450, -905);
+    glScalef(10, 1000, 20);
+    glRotatef(180, 1, 0, 0);
+    glutSolidCube(1.0);
+    glPopMatrix();
+
+    glPushMatrix();
+    glTranslated(-1235, 450, -1405);
+    glScalef(10, 1000, 20);
+    glRotatef(180, 1, 0, 0);
+    glutSolidCube(1.0);
+    glPopMatrix();
+
+    glPushMatrix();
+    glTranslated(-1235, 450, -1840);
+    glScalef(10, 1000, 20);
+    glRotatef(180, 1, 0, 0);
+    glutSolidCube(1.0);
+    glPopMatrix();
+
+    glPushMatrix();
+    glTranslated(-1235, 450, 1040);
+    glScalef(10, 1000, 20);
+    glRotatef(180, 1, 0, 0);
+    glutSolidCube(1.0);
+    glPopMatrix();
+
+    glPushMatrix();
+    glTranslated(-1235, 450, 105);
+    glScalef(10, 1000, 20);
+    glRotatef(180, 1, 0, 0);
+    glutSolidCube(1.0);
+    glPopMatrix();
+
+    glPushMatrix();
+    glTranslated(-1235, 450, 605);
+    glScalef(10, 1000, 20);
+    glRotatef(180, 1, 0, 0);
+    glutSolidCube(1.0);
+    glPopMatrix();
+}
+
+void door()
+{
+    GLfloat mat_door_ambient[] = { 0.7, 0.7, 0.0, 1.0 }; // Yellow ambient color
+    GLfloat mat_door_diffuse[] = { 0.7, 0.7, 0.0, 1.0 }; // Yellow diffuse color
+    GLfloat mat_door_specular[] = { 0.9, 0.9, 0.9, 1.0 }; // Specular color
+    GLfloat mat_door_shininess = 30.0; // Adjust shininess as needed
+
+    glMaterialfv(GL_FRONT, GL_AMBIENT, mat_door_ambient);
+    glMaterialfv(GL_FRONT, GL_DIFFUSE, mat_door_diffuse);
+    glMaterialfv(GL_FRONT, GL_SPECULAR, mat_door_specular);
+    glMaterialf(GL_FRONT, GL_SHININESS, mat_door_shininess);
+
+    glPushMatrix();
+    glTranslated(1215, 100, 800);
+    glScalef(40, 1000, 500);
+    glRotatef(180, 1, 0, 0);
+    glutSolidCube(1.0);
+    glPopMatrix();
+
+    glPushMatrix();
+    glTranslated(1215, 80, 1050);
+    glScalef(60, 1000, 50);
+    glRotatef(180, 1, 0, 0);
+    glutSolidCube(1.0);
+    glPopMatrix();
+
+    glPushMatrix();
+    glTranslated(1215, 80, 550);
+    glScalef(60, 1000, 50);
+    glRotatef(180, 1, 0, 0);
+    glutSolidCube(1.0);
+    glPopMatrix();
+
+    glPushMatrix();
+    glTranslated(1215, 500, 800);
+    glScalef(60, 50, 500);
+    glRotatef(180, 1, 0, 0);
+    glutSolidCube(1.0);
+    glPopMatrix();
+
+    glPushMatrix();
+    glTranslated(1175, 50, 650);
+    glutSolidSphere(15.0f, 100, 100);
+    glPopMatrix();
+
+    glPushMatrix();
+    glTranslated(1190, 50, 650);
+    glScalef(30, 10, 10);
+    glutSolidCube(1.0);
+    glPopMatrix();
+
+    glPushMatrix();
+    glTranslated(1195, 50, 650);
+    glScalef(5, 50, 20);
+    glutSolidCube(1.0);
+    glPopMatrix();
+}
+
+///-------SMARTBOARD CODE START-----///
+///smartboard screen
+void sbscreen()
+{
+    // Save the current attributes
+    glPushAttrib(GL_ALL_ATTRIB_BITS);
+
+    // Set material properties for the smartboard screen
+    GLfloat mat_sbscreen_ambient[] = { 0.0, 0.0, 0.0, 1.0 }; // No ambient color
+    GLfloat mat_sbscreen_diffuse[] = { 1.0, 1.0, 1.0, 1.0 }; // White diffuse color
+    GLfloat mat_sbscreen_specular[] = { 1.0, 1.0, 1.0, 1.0 }; // White specular color
+    GLfloat mat_sbscreen_shininess = 100.0; // Increase shininess for a glowing effect
+
+    glMaterialfv(GL_FRONT, GL_AMBIENT, mat_sbscreen_ambient);
+    glMaterialfv(GL_FRONT, GL_DIFFUSE, mat_sbscreen_diffuse);
+    glMaterialfv(GL_FRONT, GL_SPECULAR, mat_sbscreen_specular);
+    glMaterialf(GL_FRONT, GL_SHININESS, mat_sbscreen_shininess);
+
+    // Enable lighting for the smartboard screen
+    glEnable(GL_LIGHTING);
+    glEnable(GL_LIGHT0);   // Enable a light source
+
+    GLfloat light_position[] = { 0.0, 0.0, 0.0, 1.0 }; // Light at the origin
+    glLightfv(GL_LIGHT0, GL_POSITION, light_position);
+
+    glPushMatrix();
+    glTranslated(0, 400, 1280);
+    glScalef(1300, 800, 10);
+    glutSolidCube(1.0);
+    glPopMatrix();
+
+    // Disable lighting for the rest of the objects
+    glDisable(GL_LIGHTING);
+
+    // Restore the previous attributes
+    glPopAttrib();
+}
+
+//smart board rim
+void sbrim()
+{
+    GLfloat mat_sbrim_ambient[] = { 0.19225, 0.19225, 0.19225, 1.0 };  // Ambient color
+    GLfloat mat_sbrim_diffuse[] = { 0.50754, 0.50754, 0.50754, 1.0 };  // Diffuse color
+    GLfloat mat_sbrim_specular[] = { 0.508273, 0.508273, 0.508273, 1.0 }; // Specular color
+    GLfloat mat_sbrim_shininess = 51.2;  // Shininess value for a plastic appearance
+
+    glMaterialfv(GL_FRONT, GL_AMBIENT, mat_sbrim_ambient);
+    glMaterialfv(GL_FRONT, GL_DIFFUSE, mat_sbrim_diffuse);
+    glMaterialfv(GL_FRONT, GL_SPECULAR, mat_sbrim_specular);
+    glMaterialf(GL_FRONT, GL_SHININESS, mat_sbrim_shininess);
+
+    glPushMatrix();
+    glTranslated(0, 800, 1280);
+    glScalef(1350, 30, 20);
+    glutSolidCube(1.0);
+    glPopMatrix();
+
+    glPushMatrix();
+    glTranslated(0, 0, 1280);
+    glScalef(1350, 30, 20);
+    glutSolidCube(1.0);
+    glPopMatrix();
+
+    glPushMatrix();
+    glTranslated(-660, 400, 1280);
+    glScalef(30, 800, 20);
+    glutSolidCube(1.0);
+    glPopMatrix();
+
+    glPushMatrix();
+    glTranslated(660, 400, 1280);
+    glScalef(30, 800, 20);
+    glutSolidCube(1.0);
+    glPopMatrix();
+}
+
+
+//SMART BOARD MASTER
+void smartboard()
+{
+    sbscreen();
+    sbrim();
+
+    glPushMatrix();
+    glTranslated(-200, 100, 1272.99);
+    glScalef(2, 2, 0.1);
+    robot();
+    glPopMatrix();
+
+    glPushMatrix();
+    glTranslated(0, 30, 1272.99);
+    glScalef(1300, 60, 0.01);
+    GLfloat mat_cube_diffuse[] = { 0.0, 0.0, 0.0, 0.0 }; 
+    glMaterialfv(GL_FRONT, GL_DIFFUSE, mat_cube_diffuse);
+    glutSolidCube(1.0);
+    glPopMatrix();
+
+    glPushMatrix();
+    glTranslated(580, 200, 1272.99);
+    glScalef(80, 80, 0.01);
+    glMaterialfv(GL_FRONT, GL_DIFFUSE, mat_cube_diffuse);
+    glutSolidCube(1.0);
+    glPopMatrix();
+
+    glPushMatrix();
+    glTranslated(450, 200, 1272.99);
+    glScalef(80, 80, 0.01);
+    glMaterialfv(GL_FRONT, GL_DIFFUSE, mat_cube_diffuse);
+    glutSolidCube(1.0);
+    glPopMatrix();
+
+    glPushMatrix();
+    glTranslated(580, 350, 1272.99);
+    glScalef(80, 80, 0.01);
+    glMaterialfv(GL_FRONT, GL_DIFFUSE, mat_cube_diffuse);
+    glutSolidCube(1.0);
+    glPopMatrix();
+
+    glPushMatrix();
+    glTranslated(450, 350, 1272.99);
+    glScalef(80, 80, 0.01);
+    glMaterialfv(GL_FRONT, GL_DIFFUSE, mat_cube_diffuse);
+    glutSolidCube(1.0);
+    glPopMatrix();
+
+    glPushMatrix();
+    glTranslated(580, 500, 1272.99);
+    glScalef(80, 80, 0.01);
+    glMaterialfv(GL_FRONT, GL_DIFFUSE, mat_cube_diffuse);
+    glutSolidCube(1.0);
+    glPopMatrix();
+
+    glPushMatrix();
+    glTranslated(450, 500, 1272.99);
+    glScalef(80, 80, 0.01);
+    glMaterialfv(GL_FRONT, GL_DIFFUSE, mat_cube_diffuse);
+    glutSolidCube(1.0);
+    glPopMatrix();
+
+    glPushMatrix();
+    glTranslated(580, 650, 1272.99);
+    glScalef(80, 80, 0.01);
+    glMaterialfv(GL_FRONT, GL_DIFFUSE, mat_cube_diffuse);
+    glutSolidCube(1.0);
+    glPopMatrix();
+
+    glPushMatrix();
+    glTranslated(450, 650, 1272.99);
+    glScalef(80, 80, 0.01);
+    glMaterialfv(GL_FRONT, GL_DIFFUSE, mat_cube_diffuse);
+    glutSolidCube(1.0);
+    glPopMatrix();
+
+    glPushMatrix();
+    glTranslated(0, 780, 1272.99);
+    glScalef(1300, 40, 0.01);
+    glMaterialfv(GL_FRONT, GL_DIFFUSE, mat_cube_diffuse);
+    glutSolidCube(1.0);
+    glPopMatrix();
+
+    glPushMatrix();
+    glTranslated(512.5, 400, 1273.99);
+    glScalef(275, 800, 0.1);
+    GLfloat mat_cube1_diffuse[] = { 0.3, 0.3, 0.3, 0.3 };
+    glMaterialfv(GL_FRONT, GL_DIFFUSE, mat_cube1_diffuse);
+    glutSolidCube(1.0);
+    glPopMatrix();
+}
+///-------SMARTBOARD CODE END-----///
 
 
 
-
-
-
-
-
-
-
-
+void Classroom()
+{
+    glPushMatrix();
+    floor();
+    walls();
+    smartboard();
+    window_pane();
+    door();
+    ceiling();
+    glPopMatrix();
+}
+///------CLASSROOM VOID CODE END--------///
 
 void myinit()
 {
@@ -1932,7 +2124,8 @@ void CLASSROOM_MASTER()
     glTranslatef(-1000, 0, -1000);
     Classroom(); //walls,floor, ceiling
     Table_Master();//all table components, desktop and towers
-    Sky();
+    Skybox();
+    windows();
     glPopMatrix();
 }
 
@@ -1944,16 +2137,6 @@ void display()
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
     updateCameraView();
-
-    // Set up lighting
-    GLfloat light_position[] = { -500.0, 500.0, -500.0, 0.0 };
-    GLfloat light_color[] = { 1.0, 1.0, 0.9, 1.0 };
-
-    glLightfv(GL_LIGHT0, GL_POSITION, light_position);
-    glLightfv(GL_LIGHT0, GL_DIFFUSE, light_color);
-
-    glEnable(GL_LIGHTING);
-    glEnable(GL_LIGHT0);
 
     // Displays objects to the scene
     CLASSROOM_MASTER(); //Contains ALL components of the class
