@@ -1631,7 +1631,7 @@ void Table6()
 void Table_Master()
 {
     glPushMatrix();
-    glTranslatef(-500, 0, 0);
+    glTranslatef(-625, 0, 0);
     Table1();
     Table2();
     Table3();
@@ -2187,19 +2187,156 @@ void fan()
     glPopMatrix();
 }
 
+void fan_switch()
+{
+    GLfloat mat_fanswitch_ambient[] = { 0.2, 0.2, 0.2, 1.0 };
+    GLfloat mat_fanswitch_diffuse[] = { 0.8, 0.8, 0.8, 1.0 };
+    GLfloat mat_fanswitch_specular[] = { 1.0, 1.0, 1.0, 1.0 };
+    GLfloat mat_fanswitch_shininess = 100.0;
+
+    glMaterialfv(GL_FRONT, GL_AMBIENT, mat_fanswitch_ambient);
+    glMaterialfv(GL_FRONT, GL_DIFFUSE, mat_fanswitch_diffuse);
+    glMaterialfv(GL_FRONT, GL_SPECULAR, mat_fanswitch_specular);
+    glMaterialf(GL_FRONT, GL_SHININESS, mat_fanswitch_shininess);
+
+    glPushMatrix();
+    glTranslated(1180, 100, 400);
+    glScalef(5, 100, 50);
+    glutSolidCube(1.0);
+    glPopMatrix();
+
+    glPushMatrix();
+    glTranslated(1180, 100, 400);
+    glScalef(15, 30, 10);
+    glutSolidCube(1.0);
+    glPopMatrix();
+}
+//------FAN CODE START-----//
+
+//------LIGHT CODE START-----//
+void lightstand()
+{
+    GLfloat mat_lightstand_ambient[] = { 0.1, 0.1, 0.1, 1.0 };
+    GLfloat mat_lightstand_diffuse[] = { 0.6, 0.6, 0.6, 1.0 };
+    GLfloat mat_lightstand_specular[] = { 0.2, 0.2, 0.2, 1.0 };
+    GLfloat mat_lightstand_shininess = 10.0;
+
+    glMaterialfv(GL_FRONT, GL_AMBIENT, mat_lightstand_ambient);
+    glMaterialfv(GL_FRONT, GL_DIFFUSE, mat_lightstand_diffuse);
+    glMaterialfv(GL_FRONT, GL_SPECULAR, mat_lightstand_specular);
+    glMaterialf(GL_FRONT, GL_SHININESS, mat_lightstand_shininess);
+
+    glPushMatrix();
+    glTranslated(0, 260, -10);
+    glScalef(430, 10, 60);
+    glutSolidCube(1.0);
+    glPopMatrix();
+
+    glPushMatrix();
+    glTranslated(200, 250, -10);
+    glScalef(10, 15, 40);
+    glutSolidCube(1.0);
+    glPopMatrix();
+
+    glPushMatrix();
+    glTranslated(-200, 250, -10);
+    glScalef(10, 15, 40);
+    glutSolidCube(1.0);
+    glPopMatrix();
+}
+
+void lightbulb()
+{
+    glPushAttrib(GL_ALL_ATTRIB_BITS);
+
+    glEnable(GL_LIGHTING);
+    glEnable(GL_LIGHT0);
+
+    GLfloat light_position[] = { 0.0, 230.0, 0.0, 1.0 }; 
+    glLightfv(GL_LIGHT0, GL_POSITION, light_position);
+
+
+    GLfloat mat_lightbulb_ambient[] = { 1.0, 1.0, 1.0, 1.0 };
+    GLfloat mat_lightbulb_diffuse[] = { 1.0, 1.0, 1.0, 1.0 };
+    GLfloat mat_lightbulb_specular[] = { 1.0, 1.0, 1.0, 1.0 };
+    GLfloat mat_lightbulb_shininess = 0.0; 
+
+    glMaterialfv(GL_FRONT, GL_AMBIENT, mat_lightbulb_ambient);
+    glMaterialfv(GL_FRONT, GL_DIFFUSE, mat_lightbulb_diffuse);
+    glMaterialfv(GL_FRONT, GL_SPECULAR, mat_lightbulb_specular);
+    glMaterialf(GL_FRONT, GL_SHININESS, mat_lightbulb_shininess);
+
+    glPushMatrix();
+    glTranslated(0, 250, 0);
+    glScalef(400, 10, 10);
+    glutSolidCube(1.0);
+    glPopMatrix();
+
+    glPushMatrix();
+    glTranslated(0, 250, -20);
+    glScalef(400, 10, 10);
+    glutSolidCube(1.0);
+    glPopMatrix();
+
+    glDisable(GL_LIGHTING);
+    glPopAttrib();
+}
+
+void light_switch()
+{
+    GLfloat mat_lightswitch_ambient[] = { 0.2, 0.2, 0.2, 1.0 };
+    GLfloat mat_lightswitch_diffuse[] = { 0.8, 0.8, 0.8, 1.0 };
+    GLfloat mat_lightswitch_specular[] = { 1.0, 1.0, 1.0, 1.0 };
+    GLfloat mat_lightswitch_shininess = 100.0;
+
+    glMaterialfv(GL_FRONT, GL_AMBIENT, mat_lightswitch_ambient);
+    glMaterialfv(GL_FRONT, GL_DIFFUSE, mat_lightswitch_diffuse);
+    glMaterialfv(GL_FRONT, GL_SPECULAR, mat_lightswitch_specular);
+    glMaterialf(GL_FRONT, GL_SHININESS, mat_lightswitch_shininess);
+
+    glPushMatrix();
+    glTranslated(1180, 100, 500);
+    glScalef(5, 100, 50);
+    glutSolidCube(1.0);
+    glPopMatrix();
+
+    glPushMatrix();
+    glTranslated(1180, 100, 500);
+    glScalef(15, 30, 10);
+    glutSolidCube(1.0);
+    glPopMatrix();
+}
+
+void light()
+{
+    glPushMatrix();
+    glTranslated(0, 700, -800);
+    glScalef(2, 1.5, 1);
+    lightbulb();
+    lightstand();
+    glPopMatrix();
+
+    glPushMatrix();
+    glTranslated(0, 700, 600);
+    glScalef(2, 1.5, 1);
+    lightbulb();
+    lightstand();
+    glPopMatrix();
+}
+//------LIGHT CODE START-----//
+
 //classroom scene
 void Classroom()
 {
-    glPushMatrix();
     floor();
     walls();
     smartboard();
     window_pane();
     door();
     ceiling();
-    glPopMatrix();
-
     fan();
+    fan_switch();
+    light();
 }
 
 ///------CLASSROOM VOID CODE END--------///
