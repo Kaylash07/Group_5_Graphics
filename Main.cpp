@@ -2343,6 +2343,16 @@ void Classroom()
 
 void myinit()
 {
+    glEnable(GL_LIGHTING);
+    glEnable(GL_LIGHT0);
+    glShadeModel(GL_SMOOTH);
+    glEnable(GL_DEPTH_TEST);
+    glEnable(GL_NORMALIZE);
+
+    GLfloat classroomLightColor[] = { 0.98, 0.92, 0.84, 1.0 };
+    glLightfv(GL_LIGHT0, GL_DIFFUSE, classroomLightColor);
+
+
     glViewport(5000, 5000, 100000, 50000); 
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
@@ -2370,19 +2380,19 @@ void display()
     glLoadIdentity();
     updateCameraView();
 
+    GLfloat ambientColor[] = { 0.02, 0.02, 0.02, 0.01 };
+    glLightfv(GL_LIGHT0, GL_AMBIENT, ambientColor);
+
     // Displays objects to the scene
-    CLASSROOM_MASTER(); //Contains ALL components of the class
+    CLASSROOM_MASTER(); // Contains ALL components of the class
 
     glutSwapBuffers();
 }
 
-
-
-
 int main(int argc, char** argv)
 {
     glutInit(&argc, argv);
-    glutInitDisplayMode(GLUT_SINGLE | GLUT_RGB | GLUT_DEPTH);
+    glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH); // Use double buffering
     glutInitWindowSize(width, height);
     glutCreateWindow("Classroom");
     myinit(); // Initialize your OpenGL environment, including viewport and projection.
@@ -2391,15 +2401,5 @@ int main(int argc, char** argv)
     glutKeyboardFunc(keyboard);
     glutTimerFunc(0, updateBladeRotation, 0);
 
-
-    // Enable or disable OpenGL features as needed.
-    glEnable(GL_LIGHTING);
-    glEnable(GL_LIGHT0);
-    glShadeModel(GL_SMOOTH);
-    glEnable(GL_DEPTH_TEST);
-    glEnable(GL_NORMALIZE);
-
     glutMainLoop();
 }
-
-
