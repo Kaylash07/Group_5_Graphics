@@ -2094,8 +2094,100 @@ void smartboard()
 }
 ///-------SMARTBOARD CODE END-----///
 
+//------FAN CODE START-----//
+GLfloat bladeRotation = 30.0;
 
+void blades()
+{
+    GLfloat mat_blades_ambient[] = { 0.19225, 0.19225, 0.19225, 1.0 };
+    GLfloat mat_blades_diffuse[] = { 0.50754, 0.50754, 0.50754, 1.0 };
+    GLfloat mat_blades_specular[] = { 0.508273, 0.508273, 0.508273, 1.0 };
+    GLfloat mat_blades_shininess = 15.0;
 
+    glMaterialfv(GL_FRONT, GL_AMBIENT, mat_blades_ambient);
+    glMaterialfv(GL_FRONT, GL_DIFFUSE, mat_blades_diffuse);
+    glMaterialfv(GL_FRONT, GL_SPECULAR, mat_blades_specular);
+    glMaterialf(GL_FRONT, GL_SHININESS, mat_blades_shininess);
+
+    glPushMatrix();
+    glTranslated(0, 200, 0);
+    glScalef(30, 1, 400);
+    glutSolidCube(1.0);
+    glPopMatrix();
+
+    glPushMatrix();
+    glTranslated(0, 200, 0);
+    glScalef(400, 1, 30);
+    glutSolidCube(1.0);
+    glPopMatrix();
+
+    glPushMatrix();
+    glTranslated(0, 200, 0);
+    glScalef(2.5, 1.0, 2.5);
+    glutSolidSphere(10.0, 10, 10);
+    glPopMatrix();
+}
+
+void fan_leg()
+{
+    GLfloat mat_fanleg_ambient[] = { 0.0, 0.0, 0.0, 1.0 };
+    GLfloat mat_fanleg_diffuse[] = { 0.1, 0.1, 0.1, 1.0 };
+    GLfloat mat_fanleg_specular[] = { 0.2, 0.2, 0.2, 1.0 };
+    GLfloat mat_fanleg_shininess = 50.0;
+
+    glMaterialfv(GL_FRONT, GL_AMBIENT, mat_fanleg_ambient);
+    glMaterialfv(GL_FRONT, GL_DIFFUSE, mat_fanleg_diffuse);
+    glMaterialfv(GL_FRONT, GL_SPECULAR, mat_fanleg_specular);
+    glMaterialf(GL_FRONT, GL_SHININESS, mat_fanleg_shininess);
+
+    glPushMatrix();
+    glTranslated(0, 250, 0);
+    glScalef(5, 100, 5);
+    glutSolidCube(1.0);
+    glPopMatrix();
+
+    glPushMatrix();
+    glTranslated(0, 300, 0);
+    glScalef(2.5, 1.5, 2.5);
+    glutSolidSphere(10.0, 10, 10);
+    glPopMatrix();
+}
+
+void beyblade()
+{
+    glPushMatrix();
+    glRotatef(bladeRotation, 0, 1, 0);
+    blades();
+    glPopMatrix();
+}
+
+void updateBladeRotation(int value) {
+    bladeRotation += 5.0; // Adjust the rotation speed as needed
+    if (bladeRotation > 360.0) {
+        bladeRotation -= 360.0;
+    }
+    glutPostRedisplay();
+    glutTimerFunc(10, updateBladeRotation, 0);
+}
+
+void fan()
+{
+    glPushMatrix();
+    glTranslated(0, 500, -1500);
+    glScalef(2, 2, 2);
+    fan_leg();
+    beyblade();
+    glPopMatrix();
+
+    glPushMatrix();
+    glTranslated(0, 500, 0);
+    glScalef(2, 2, 2);
+    fan_leg();
+    beyblade();
+    glPopMatrix();
+}
+
+//classroom scene
 void Classroom()
 {
     glPushMatrix();
@@ -2106,15 +2198,18 @@ void Classroom()
     door();
     ceiling();
     glPopMatrix();
+
+    fan();
 }
+
 ///------CLASSROOM VOID CODE END--------///
 
 void myinit()
 {
-    glViewport(5000, 5000, 100000, 50000);  // Set the viewport to start at (0, 0) and have dimensions of 800x800.
+    glViewport(5000, 5000, 100000, 50000); 
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
-    glOrtho(-1400, 1400, -1400, 1400, -3000, 3000);  // Adjust the orthographic projection to focus on a smaller region around the origin.
+    glOrtho(-1400, 1400, -1400, 1400, -3000, 3000); 
     glMatrixMode(GL_MODELVIEW);
 }
 
@@ -2157,6 +2252,7 @@ int main(int argc, char** argv)
     glutReshapeFunc(reshape);
     glutDisplayFunc(display);
     glutKeyboardFunc(keyboard);
+    glutTimerFunc(0, updateBladeRotation, 0);
 
 
     // Enable or disable OpenGL features as needed.
